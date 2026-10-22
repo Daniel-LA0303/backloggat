@@ -4,9 +4,13 @@ import Modal from '../components/Modal';
 import UIButton from '../components/UIButton';
 import UITextField from '../components/UITextField';
 import { UISelect } from '../components/UISelect';
+import { DockMenu } from '../components/DockMenu';
+import { useNavigate } from 'react-router-dom';
+import { GearIcon } from '../utils/iconsUtils';
 
 const Skills = () => {
 
+  const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -21,8 +25,16 @@ const Skills = () => {
         <Circles />
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 py-10">
+      <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 py-10">
 
+        <DockMenu
+          items={[
+            { label: 'Home', onClick: () => navigate('/') },
+            { label: 'Profile', onClick: () => navigate('/profile') },
+            { label: 'Settings', icon: <GearIcon size={16} />, onClick: () => navigate('/profile')},
+          ]}
+        />
+        here
         <button
           type='button'
           className='bg-blue-800 p-3 w-20 rounded-2xl cursor-pointer'
@@ -117,19 +129,19 @@ const Skills = () => {
               rows={10}
             />
 
-                        <UITextField
+            <UITextField
               label="Name"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="e.g. Technology"
             />
-                        <UITextField
+            <UITextField
               label="Name"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="e.g. Technology"
             />
-                        <UITextField
+            <UITextField
               label="Name"
               value={name}
               onChange={e => setName(e.target.value)}

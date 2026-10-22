@@ -1,8 +1,12 @@
 import React from 'react'
 import Circles from './Circles';
+import { DockMenu } from './DockMenu';
+import { GearIcon } from '../utils/iconsUtils';
+import { useNavigate } from 'react-router-dom';
 
 const Test = () => {
 
+    const navigate = useNavigate();
     console.log("hey");
 
     return (
@@ -11,6 +15,13 @@ const Test = () => {
                 <Circles />
             </div>
 
+        <DockMenu
+          items={[
+            { label: 'Home', onClick: () => navigate('/') },
+            { label: 'Profile', onClick: () => navigate('/profile') },
+            { label: 'Settings', icon: <GearIcon size={16} />, onClick: () => navigate('/profile')},
+          ]}
+        />
             <main className="relative z-10 mx-auto flex w-full max-w-[1080px] flex-col gap-6 py-10">
 
                 <div className="rise flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-white/10 pb-3 font-mono text-[11px] tracking-[0.14em] text-dim" >

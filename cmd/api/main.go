@@ -37,5 +37,6 @@ func run() error {
 
 	log.Printf("server running on http://%s", cfg.Addr) // <- the log
 
+	// return a server
 	return server.New(cfg, db).Run(ctx)
 }
