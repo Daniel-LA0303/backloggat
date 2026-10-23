@@ -3,6 +3,7 @@ package server
 import (
 	"backloggat/internal/config"
 	"backloggat/runner/modules/skills"
+	"backloggat/runner/modules/user"
 	"backloggat/runner/platform/apperr"
 	"backloggat/runner/platform/response"
 	"context"
@@ -24,6 +25,10 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 	skillsSvc := skills.NewService(skillsRepo)
 	skillsHandler := skills.NewHandler(skillsSvc)
 
+	userRepo := user.NewUserRepository(db)
+	userSvc := user.NewUserService(userRepo)
+	userHandler := user.NewUserHandler(userSvc)
+
 	// 2. ROUTER
 	r := chi.NewRouter()
 	r.Use(chimw.Logger, chimw.Recoverer)
@@ -34,6 +39,7 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 	// 3. MOUNT every module under /api
 	r.Route("/api", func(api chi.Router) {
 		skills.RegisterRoutes(api, skillsHandler)
+		user.RegisterUserRoutes(api, userHandler)
 		// projects.RegisterRoutes(api, projectsHandler)  <- later
 	})
 
