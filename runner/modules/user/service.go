@@ -61,7 +61,7 @@ func (s *UserService) CreateUser(
 ) {
 
 	// 1. validate user
-	exists, _ := s.repo.GetByEmail(ctx, user.Email) // _ means i know exist an error but sen to console print
+	exists, _ := s.repo.GetByEmail(ctx, user.Email) // _ means i know exist an error but send to console print
 	if exists != nil {
 		return nil, apperr.NewConflict("There is already this email registered " + user.Email)
 	}

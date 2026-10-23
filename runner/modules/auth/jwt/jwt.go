@@ -1,6 +1,8 @@
 package jwt
 
 import (
+	"backloggat/runner/platform/apperr"
+	"backloggat/runner/platform/response"
 	"context"
 	"fmt"
 	"net/http"
@@ -74,36 +76,42 @@ func ValidateJWT(tokenString string) (*CustomClaims, error) {
 }
 
 // middleware to ckech if is auth
-func WithJWTAuth(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func WithJWTAuth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "unauthorized: missing header", http.StatusUnauthorized)
+
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			err := apperr.NewUnauthorized("Unauthorized, you need to login to do that.")
+			//http.Error(w, "unauthorized", http.StatusUnauthorized)
+			response.Fail(w, r, err)
 			return
 		}
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		tokenString := strings.TrimSpace(
+			strings.TrimPrefix(authHeader, "Bearer "),
+		)
 
-		// 1. validate token
 		claims, err := ValidateJWT(tokenString)
 		if err != nil {
-			http.Error(w, "unauthorized: "+err.Error(), http.StatusUnauthorized)
+			//http.Error(w, "unauthorized", http.StatusUnauthorized)
+			err := apperr.NewUnauthorized("Token invalid or expired, relogin please.")
+			response.Fail(w, r, err)
 			return
 		}
 
-		// 2. access claims direct
-		userId := claims.UserId
+		userID := claims.UserId
 
-		if userId == "" {
-			http.Error(w, "unauthorized: empty user id", http.StatusUnauthorized)
+		// If UserId is a string:
+		if userID == "" {
+			//http.Error(w, "unauthorized", http.StatusUnauthorized)
+			err := apperr.NewUnauthorized("Token invalid, relogin please.")
+			response.Fail(w, r, err)
 			return
 		}
 
-		// 3. send values to ctx
-		ctx := context.WithValue(r.Context(), userKeyId, userId)
-		//ctx = context.WithValue(ctx, OrgIDKey, orgId)
+		ctx := context.WithValue(r.Context(), userKeyId, userID)
 
-		next(w, r.WithContext(ctx))
-	}
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
