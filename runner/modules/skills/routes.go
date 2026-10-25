@@ -10,10 +10,10 @@ import (
 func RegisterRoutes(r chi.Router, h *Handler) {
 	r.Group(func(r chi.Router) {
 		r.Use(jwt.WithJWTAuth)
-		r.Post("/skills", response.Handle(h.Create))
-		r.Get("/skills", response.Handle(h.GetSkillsByUser))
+		r.Post("/skills", response.Handle(h.Create))         // create new skill
+		r.Get("/skills", response.Handle(h.GetSkillsByUser)) // get all skills by user
 		r.Get("/skills/{id}", response.Handle(h.GetByID))
-		r.Delete("/skills/{id}", response.Handle(h.DeleteById))
+		r.Delete("/skills/{id}", response.Handle(h.DeleteById)) // delete one skill
 	})
 
 }

@@ -13,6 +13,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	chimw "github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -37,6 +38,15 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 	// 2. ROUTER
 	r := chi.NewRouter()
 	r.Use(chimw.Logger, chimw.Recoverer)
+
+	// cors config
+	r.Use(cors.Handler((cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	})))
 	r.NotFound(response.Handle(func(w http.ResponseWriter, r *http.Request) error {
 		return apperr.NewNotFound("Route")
 	}))

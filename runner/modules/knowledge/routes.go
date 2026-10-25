@@ -10,9 +10,9 @@ import (
 func RegisterRoutes(r chi.Router, h *KnowledgeHandler) {
 	r.Group(func(r chi.Router) {
 		r.Use(jwt.WithJWTAuth)
-		r.Get("/knowledges", response.Handle(h.GetKnowledgeByUser))
-		r.Post("/knowledges", response.Handle(h.CreateKnowledge))
-		r.Delete("/knowledges/{id}", response.Handle(h.DeleteKnowledge))
+		r.Get("/knowledges", response.Handle(h.GetKnowledgeByUser))      // get all knowledges by user
+		r.Post("/knowledges", response.Handle(h.CreateKnowledge))        // create new knowledge
+		r.Delete("/knowledges/{id}", response.Handle(h.DeleteKnowledge)) // delete a knowledge
 	})
 
 }

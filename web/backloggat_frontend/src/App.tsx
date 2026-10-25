@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Login from './pages/Login';
 import Skills from './pages/Skills';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 /*function Root() {
   return (
@@ -19,21 +20,25 @@ import Skills from './pages/Skills';
   )
 }*/
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-    {/*<Route path="/" element={<Root />}>
-      <Route path="login" element={<Login />} />
-
-    </Route>*/}
-    <Route path='login' element={<Login />}/>
-    <Route path='/' element={<Test />}/>
-
-    <Route path='/skills' element={<Skills />}/>
-    </>
-    
-  )
-);
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/home",
+        element: <Test />,
+      },
+      {
+        path: "/skills",
+        element: <Skills />,
+      },
+    ],
+  },
+]);
 
 
 function App() {

@@ -18,6 +18,7 @@ func NewKnowledgeRepository(db *sqlx.DB) *KnowledgeRepository {
 	return &KnowledgeRepository{db: db}
 }
 
+// TODO: this repo should be in skill service
 func (r *KnowledgeRepository) ListKnowledgeBySkill(userId int64, skillId int64) ([]Knowlage, error) {
 	skills := []Knowlage{}
 	err := r.db.Select(&skills,
@@ -34,6 +35,7 @@ func (r *KnowledgeRepository) ListKnowledgeBySkill(userId int64, skillId int64) 
 	return skills, nil
 }
 
+// list knoledge without pagination
 func (r *KnowledgeRepository) ListKnowledge(userId int64) ([]Knowlage, error) {
 	skills := []Knowlage{}
 	err := r.db.Select(&skills,
@@ -57,6 +59,7 @@ func (r *KnowledgeRepository) ListKnowledge(userId int64) ([]Knowlage, error) {
 	return skills, nil
 }
 
+// get one by id
 func (r *KnowledgeRepository) GetByID(ctx context.Context, id int64, userID int64) (*Knowlage, error) {
 	var s Knowlage
 	err := r.db.GetContext(ctx, &s,
@@ -73,6 +76,7 @@ func (r *KnowledgeRepository) GetByID(ctx context.Context, id int64, userID int6
 	return &s, nil
 }
 
+// create new knowledge
 func (r *KnowledgeRepository) CreateKnowledge(ctx context.Context, userID int64, data *CreateKnowledge) (*KnowlageInfo, error) {
 
 	query := `
@@ -99,6 +103,7 @@ func (r *KnowledgeRepository) CreateKnowledge(ctx context.Context, userID int64,
 	return &knowledgeR, nil
 }
 
+// to insert in pivote table
 func (r *KnowledgeRepository) InserKnowledgeSkill(ctx context.Context, skillId int64, knowledgeId int64) error {
 
 	query := `
@@ -113,6 +118,7 @@ func (r *KnowledgeRepository) InserKnowledgeSkill(ctx context.Context, skillId i
 	return nil
 }
 
+// to delete one knowledge
 func (r *KnowledgeRepository) DeleteKnowledge(ctx context.Context, knowledgeId int64) error {
 
 	query := `

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Circles from '../components/Circles'
 import Modal from '../components/Modal';
 import UIButton from '../components/UIButton';
@@ -7,17 +7,51 @@ import { UISelect } from '../components/UISelect';
 import { DockMenu } from '../components/DockMenu';
 import { useNavigate } from 'react-router-dom';
 import { GearIcon } from '../utils/iconsUtils';
+import { useApi } from '../context/ApiContext';
+import { Spinner } from '../components/Spinner';
+import type { SkillInfo } from '../interfaces/skills.interfaces';
+import { ScreenSpinner } from '../components/ScreenSpinnerProps';
+import { SkillCard } from '../components/skills/SkillCard';
 
 const Skills = () => {
 
   const navigate = useNavigate();
 
+  const { requestAuth, loading } = useApi();
+
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [skills, setSkills] = useState<SkillInfo[]>([]);
 
   const [name, setName] = useState<string>("");
   const [name2, setName2] = useState<string>("");
   const [city, setCity] = useState<string>("");
 
+
+
+  useEffect(() => {
+
+    const getSkillsByUser = async () => {
+      const data = await requestAuth<any>("/api/skills", {
+        method: "GET",
+      });
+      if (!data) return;
+
+      console.log(data);
+      setSkills(data);
+
+    }
+
+    getSkillsByUser();
+
+  }, [])
+
+
+  const handleDelete = (skillId: number) => {
+    console.log("skill delete: " + skillId);
+    
+  }
+
+  if (loading) return <div className='h-screen'><ScreenSpinner /></div>
 
   return (
     <>
@@ -31,9 +65,23 @@ const Skills = () => {
           items={[
             { label: 'Home', onClick: () => navigate('/') },
             { label: 'Profile', onClick: () => navigate('/profile') },
-            { label: 'Settings', icon: <GearIcon size={16} />, onClick: () => navigate('/profile')},
+            { label: 'Settings', icon: <GearIcon size={16} />, onClick: () => navigate('/profile') },
           ]}
         />
+
+
+        <p className='text-center text-3xl'>{skills.length === 0 ? 'No skills yet, create one' : 'Your skills'}</p>
+        <div className='gap-3 grid grid-cols-1 md:grid-cols-2'>
+                  {skills.map((e, index) => (
+          <SkillCard
+            key={e.id}
+            skill={e}
+            index={index}
+            onClick={(s) => navigate(`/skills/${s.id}`)}
+            onDelete={(s) => handleDelete(s.id)}
+          />
+        ))}
+        </div>
         here
         <button
           type='button'

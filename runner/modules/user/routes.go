@@ -7,6 +7,6 @@ import (
 )
 
 func RegisterUserRoutes(r chi.Router, h *UserHandler) {
-	r.Post("/auth/register", response.Handle(h.CreateUser))
-	r.Post("/auth/login", response.Handle(h.LoginUser))
+	r.Post("/auth/register", response.Handle(h.CreateUser)) // register new user
+	r.Post("/auth/login", response.Handle(h.LoginUser))     // login user
 }

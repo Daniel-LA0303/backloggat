@@ -9,7 +9,8 @@ const UITextField = ({
     rows,
     disabled,
     startAdornment,
-    mono
+    mono,
+    type
 }: {
     label?: string;
     value: string;
@@ -20,6 +21,7 @@ const UITextField = ({
     disabled?: boolean;
     startAdornment?: React.ReactNode;
     mono?: boolean
+    type?: string
 }) => {
 
     const [focused, setFocused] = useState<boolean>(false);
@@ -29,11 +31,11 @@ const UITextField = ({
 
 
     return (
-        <div className='flex flex-col gap-1 mb-5'>
+        <div className='flex flex-col gap-1 mb-7'>
 
             {label && (
                 <label
-                    className={`text-[13px] ${focused ? 'text-white' : 'text-white/70'}`}
+                    className={`text-[13px] mb-3 ${focused ? 'text-white' : 'text-white/70'}`}
                 >
                     {label}
                 </label>
@@ -51,6 +53,7 @@ const UITextField = ({
                 {startAdornment}
                 <Tag
                     value={value}
+                    type={type && type}
                     onChange={onChange}
                     placeholder={placeholder}
                     disabled={disabled}

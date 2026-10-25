@@ -23,7 +23,7 @@ func (s *KnowledgeService) GetKnowledgesByUser(
 	return s.repo.ListKnowledge(userId)
 }
 
-// get all Knowledge by user
+// // TODO: this repo should be in skill service
 func (s *KnowledgeService) GetKnowledgesBySkillAndUser(
 	ctx context.Context,
 	userId int64,
@@ -33,6 +33,7 @@ func (s *KnowledgeService) GetKnowledgesBySkillAndUser(
 	return s.repo.ListKnowledgeBySkill(userId, skill)
 }
 
+// create knowledge
 func (s *KnowledgeService) CreateKnowledge(
 	ctx context.Context,
 	userId int64,
@@ -64,6 +65,7 @@ func (s *KnowledgeService) CreateKnowledge(
 	}, nil
 }
 
+// deelte by id
 func (s *KnowledgeService) DeleteById(ctx context.Context, knowledgeId int64, userId int64) error {
 
 	// 1. valid skills

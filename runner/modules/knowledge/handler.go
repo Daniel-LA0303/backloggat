@@ -17,6 +17,7 @@ func NewKnowledgeHandler(svc *KnowledgeService) *KnowledgeHandler {
 	return &KnowledgeHandler{svc: svc}
 }
 
+// get all knowledge by user
 func (h *KnowledgeHandler) GetKnowledgeByUser(w http.ResponseWriter, r *http.Request) error {
 
 	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
@@ -29,6 +30,7 @@ func (h *KnowledgeHandler) GetKnowledgeByUser(w http.ResponseWriter, r *http.Req
 	return nil
 }
 
+// TODO: this repo should be in skill service
 func (h *KnowledgeHandler) GetKnowledgeBySkillAndUser(w http.ResponseWriter, r *http.Request) error {
 
 	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
@@ -42,6 +44,7 @@ func (h *KnowledgeHandler) GetKnowledgeBySkillAndUser(w http.ResponseWriter, r *
 	return nil
 }
 
+// create handler
 func (h *KnowledgeHandler) CreateKnowledge(w http.ResponseWriter, r *http.Request) error {
 
 	var req CreateKnowledge
@@ -63,6 +66,7 @@ func (h *KnowledgeHandler) CreateKnowledge(w http.ResponseWriter, r *http.Reques
 	return nil
 }
 
+// delete handler
 func (h *KnowledgeHandler) DeleteKnowledge(w http.ResponseWriter, r *http.Request) error {
 
 	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
