@@ -3,14 +3,15 @@ import Test from './components/Test'
 
 import {
   createBrowserRouter,
-  createRoutesFromElements,
-  Route,
   RouterProvider,
 } from "react-router-dom";
 import Login from './pages/Login';
 import Skills from './pages/Skills';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Knowledges from './pages/Knowledges';
+import Passwords from './pages/Passwords';
+import Resources from './pages/Resources';
+import Notes from './pages/Notes';
 
 /*function Root() {
   return (
@@ -40,6 +41,18 @@ const router = createBrowserRouter([
       {
         path: "/knowledges",
         element: <Knowledges />,
+      },
+      {
+        path: "/passwords",
+        element: <Passwords />,
+      },
+      {
+        path: "/resources",
+        element: <Resources />,
+      },
+      {
+        path: "/notes",
+        element: <Notes />,
       },
     ],
   },
