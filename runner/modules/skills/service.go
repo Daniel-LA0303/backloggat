@@ -3,6 +3,8 @@ package skills
 import (
 	"backloggat/runner/platform/apperr"
 	"context"
+	"strings"
+	"unicode/utf8"
 )
 
 type Service struct {
@@ -16,11 +18,15 @@ func NewService(repo *Repository) *Service {
 func (s *Service) GetSkillByUser(
 	ctx context.Context,
 	userId int64,
+	filters SkillFilters,
 ) ([]SkillResponseDTO, error) {
 
-	return s.repo.ListSkills(userId)
-}
+	filters.Search = strings.TrimSpace(filters.Search)
+	filters.SortBy = strings.ToLower(filters.SortBy)
+	filters.Order = strings.ToLower(filters.Order)
 
+	return s.repo.ListSkills(userId, filters)
+}
 func (s *Service) Create(
 	ctx context.Context,
 	userId int64,
@@ -72,4 +78,26 @@ func (s *Service) DeleteById(ctx context.Context, skillId int64, userId int64) e
 	}
 	// 2. return skill
 	return s.repo.DeleteSkill(ctx, skillId)
+}
+
+func (s *Service) UpdateSkill(
+	ctx context.Context,
+	userID, skillID int64,
+	req UpdateSkillRequestDTO,
+) (*SkillResponseDTO, error) {
+
+	req.Name = strings.TrimSpace(req.Name)
+	req.Color = strings.TrimSpace(req.Color)
+
+	fields := map[string]string{}
+	if req.Name == "" {
+		fields["name"] = "Name is required"
+	} else if utf8.RuneCountInString(req.Name) > 50 {
+		fields["name"] = "Name must be at most 50 characters"
+	}
+	if len(fields) > 0 {
+		return nil, apperr.NewValidationFields("Invalid skill data", fields)
+	}
+
+	return s.repo.UpdateSkill(userID, skillID, req)
 }

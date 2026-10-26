@@ -4,8 +4,9 @@ import type { SkillInfo } from "../../interfaces/skills.interfaces";
 
 type SkillCardProps = {
   skill: SkillInfo;
-  index?: number;               // for the staggered "rise" animation
+  index?: number;
   onClick?: (skill: SkillInfo) => void;
+  onEdit?: (skill: SkillInfo) => void;
   onDelete?: (skill: SkillInfo) => void;
 };
 
@@ -15,7 +16,7 @@ function formatDate(value: string) {
   return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
-export function SkillCard({ skill, index = 0, onClick, onDelete }: SkillCardProps) {
+export function SkillCard({ skill, index = 0, onClick, onEdit, onDelete }: SkillCardProps) {
   const stats = [
     { label: "Projects", value: skill.countProject },
     { label: "Notes", value: skill.countNotes },
@@ -51,18 +52,17 @@ export function SkillCard({ skill, index = 0, onClick, onDelete }: SkillCardProp
         </div>
 
         <span
-          className={`num shrink-0 rounded-full border px-2.5 py-0.5 text-xs ${
-            total > 0
+          className={`num shrink-0 rounded-full border px-2.5 py-0.5 text-xs ${total > 0
               ? "border-[#8FD3AE]/40 bg-[#8FD3AE]/10 text-[#8FD3AE]"
               : "border-white/10 bg-white/5 text-[#A7B5AD]"
-          }`}
+            }`}
         >
           {total > 0 ? `${total} linked` : "Unused"}
         </span>
       </div>
 
       {/* divider */}
-      <div className="relative my-4 h-px w-full bg-gradient-to-r from-[#8FD3AE]/40 via-[#96BEA8]/15 to-transparent" />
+      <div className="relative my-4 h-px w-full from-[#8FD3AE]/40 via-[#96BEA8]/15 to-transparent" />
 
       {/* stats */}
       <dl className="relative grid grid-cols-4 gap-2">
@@ -72,9 +72,8 @@ export function SkillCard({ skill, index = 0, onClick, onDelete }: SkillCardProp
             className="flex flex-col items-center rounded-lg border border-white/5 bg-black/20 px-1 py-2.5"
           >
             <dd
-              className={`num text-xl font-semibold ${
-                s.value > 0 ? "text-[#F2F2F2]" : "text-[#A7B5AD]/50"
-              }`}
+              className={`num text-xl font-semibold ${s.value > 0 ? "text-[#F2F2F2]" : "text-[#A7B5AD]/50"
+                }`}
             >
               {s.value}
             </dd>
@@ -89,18 +88,32 @@ export function SkillCard({ skill, index = 0, onClick, onDelete }: SkillCardProp
       <div className="relative mt-4 flex items-center justify-between text-xs text-[#A7B5AD]">
         <span>Created {formatDate(skill.created_at)}</span>
 
-        {onDelete && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation(); // don't trigger the card's onClick
-              onDelete(skill);
-            }}
-            className="rounded-md px-2 py-1 text-[#A7B5AD] opacity-0 transition hover:bg-red-500/10 hover:text-red-300 focus-visible:opacity-100 group-hover:opacity-100"
-          >
-            Delete
-          </button>
-        )}
+        <div className="flex gap-1 opacity-0 transition focus-within:opacity-100 group-hover:opacity-100">
+          {onEdit && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(skill);
+              }}
+              className="rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
+            >
+              Edit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(skill);
+              }}
+              className="rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );

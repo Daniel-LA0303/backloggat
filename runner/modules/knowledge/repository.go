@@ -5,7 +5,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -35,100 +37,151 @@ func (r *KnowledgeRepository) ListKnowledgeBySkill(userId int64, skillId int64) 
 	return skills, nil
 }
 
-// list knoledge without pagination
-func (r *KnowledgeRepository) ListKnowledge(userId int64) ([]Knowlage, error) {
-	skills := []Knowlage{}
-	err := r.db.Select(&skills,
-		`SELECT 
-			s.knowlage_id, 
-			s.user_id, 
-			s.name, 
-			s.description,
-			s.color, 
-			s.created_at, 
-			s.updated_at
-		 FROM knowlage_tbl s
-		 WHERE s.user_id = ?
-		 ORDER BY s.name`,
-		userId,
-	)
-	if err != nil {
-		log.Printf("ListKnowledge ERROR: %v\n", err)
-		return nil, err
-	}
-	return skills, nil
+// list knowledge without pagination
+var knowledgeSortColumns = map[string]string{
+	"name":       "name",
+	"created_at": "created_at",
 }
 
-// get one by id
-func (r *KnowledgeRepository) GetByID(ctx context.Context, id int64, userID int64) (*Knowlage, error) {
-	var s Knowlage
-	err := r.db.GetContext(ctx, &s,
-		`SELECT knowlage_id, user_id, name, color, created_at, updated_at
-		 FROM knowlage_tbl WHERE knowlage_id = ? AND user_id = ?`, id, userID)
+var likeEscaper = strings.NewReplacer(`\`, `\\`, `%`, `\%`, `_`, `\_`)
 
-	// when is not a row, then return null
-	if errors.Is(err, sql.ErrNoRows) {
-		return nil, nil
+func (r *KnowledgeRepository) ListKnowledge(userId int64, f KnowledgeFilters) ([]Knowlage, error) {
+	items := []Knowlage{}
+
+	query := `SELECT
+			knowlage_id,
+			user_id,
+			name,
+			COALESCE(description, '') AS description,
+			color,
+			created_at,
+			updated_at
+		 FROM knowlage_tbl
+		 WHERE user_id = ?`
+	args := []any{userId}
+
+	if f.Search != "" {
+		query += ` AND name LIKE ? ESCAPE '\'`
+		args = append(args, "%"+likeEscaper.Replace(f.Search)+"%")
 	}
+
+	col, ok := knowledgeSortColumns[f.SortBy]
+	if !ok {
+		col = "name"
+	}
+	dir := "ASC"
+	if f.Order == "desc" {
+		dir = "DESC"
+	}
+	query += fmt.Sprintf(` ORDER BY %s %s, knowlage_id ASC`, col, dir)
+
+	if err := r.db.Select(&items, query, args...); err != nil {
+		log.Printf("ListKnowledge ERROR: %v\n", err)
+		return nil, apperr.NewDatabase(err)
+	}
+	return items, nil
+}
+
+// create knowledge + pivot rows in one transaction
+func (r *KnowledgeRepository) CreateKnowledge(ctx context.Context, userID int64, data *CreateKnowledge) (*Knowlage, error) {
+
+	tx, err := r.db.BeginTxx(ctx, nil)
 	if err != nil {
 		return nil, apperr.NewDatabase(err)
 	}
-	return &s, nil
-}
+	defer tx.Rollback()
 
-// create new knowledge
-func (r *KnowledgeRepository) CreateKnowledge(ctx context.Context, userID int64, data *CreateKnowledge) (*KnowlageInfo, error) {
-
-	query := `
-		INSERT INTO knowlage_tbl (user_id, name, description, color) VALUES (?, ?, ?, ?) 
-		returning knowlage_id, user_id, name, description, color, created_at
-	`
-
-	var knowledgeR KnowlageInfo
-
-	err := r.db.QueryRowContext(ctx, query,
-		userID, data.Name, data.Description, data.Color).Scan(
-		&knowledgeR.KnowlageId,
-		&knowledgeR.UserId,
-		&knowledgeR.Name,
-		&knowledgeR.Description,
-		&knowledgeR.Color,
-		&knowledgeR.CreatedAt,
+	var k Knowlage
+	err = tx.GetContext(ctx, &k,
+		`INSERT INTO knowlage_tbl (user_id, name, description, color)
+		 VALUES (?, ?, ?, ?)
+		 RETURNING knowlage_id, user_id, name, COALESCE(description, '') AS description,
+		           color, created_at, updated_at`,
+		userID, data.Name, data.Description, data.Color,
 	)
-
 	if err != nil {
 		log.Printf("CreateKnowledge ERROR: %v\n", err)
-		return nil, err
+		return nil, apperr.NewDatabase(err)
 	}
-	return &knowledgeR, nil
+
+	for _, skillID := range data.SkillsIds {
+		_, err := tx.ExecContext(ctx,
+			`INSERT OR IGNORE INTO knowlage_skills_tbl (knowlage_id, skill_id) VALUES (?, ?)`,
+			k.KnowlageId, skillID,
+		)
+		if err != nil {
+			log.Printf("CreateKnowledge pivot ERROR: %v\n", err)
+			return nil, apperr.NewDatabase(err)
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, apperr.NewDatabase(err)
+	}
+	return &k, nil
 }
 
-// to insert in pivote table
-func (r *KnowledgeRepository) InserKnowledgeSkill(ctx context.Context, skillId int64, knowledgeId int64) error {
+// update info of one knowledge
+func (r *KnowledgeRepository) UpdateKnowledge(ctx context.Context, userID, knowledgeID int64, data *UpdateKnowledge) (*Knowlage, error) {
 
-	query := `
-		INSERT INTO knowlage_skills_tbl (knowlage_id, skill_id) VALUES (?, ?) 
-	`
-	_, err := r.db.ExecContext(ctx, query, knowledgeId, skillId)
-
+	var k Knowlage
+	err := r.db.GetContext(ctx, &k,
+		`UPDATE knowlage_tbl
+		 SET name = ?,
+		     description = ?,
+		     color = ?,
+		     updated_at = datetime('now')
+		 WHERE knowlage_id = ? AND user_id = ?
+		 RETURNING knowlage_id, user_id, name, COALESCE(description, '') AS description,
+		           color, created_at, updated_at`,
+		data.Name, data.Description, data.Color, knowledgeID, userID,
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, apperr.NewNotFound("Knowledge")
+	}
 	if err != nil {
-		log.Printf("InserKnowledgeSkill ERROR: %v\n", err)
-		return err
+		log.Printf("UpdateKnowledge ERROR: %v\n", err)
+		return nil, apperr.NewDatabase(err)
 	}
-	return nil
+	return &k, nil
 }
 
-// to delete one knowledge
-func (r *KnowledgeRepository) DeleteKnowledge(ctx context.Context, knowledgeId int64) error {
+// delete knowledge and its pivot rows in one transaction
+func (r *KnowledgeRepository) DeleteKnowledge(ctx context.Context, userID, knowledgeID int64) error {
 
-	query := `
-		delete from knowlage_tbl where knowlage_id = ?
-	`
-	_, err := r.db.ExecContext(ctx, query, knowledgeId)
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return apperr.NewDatabase(err)
+	}
+	defer tx.Rollback()
 
+	// pivot first (no ON DELETE CASCADE there), scoped to the owner
+	_, err = tx.ExecContext(ctx,
+		`DELETE FROM knowlage_skills_tbl
+		 WHERE knowlage_id IN (
+		   SELECT knowlage_id FROM knowlage_tbl WHERE knowlage_id = ? AND user_id = ?
+		 )`,
+		knowledgeID, userID,
+	)
+	if err != nil {
+		log.Printf("DeleteKnowledge pivot ERROR: %v\n", err)
+		return apperr.NewDatabase(err)
+	}
+
+	res, err := tx.ExecContext(ctx,
+		`DELETE FROM knowlage_tbl WHERE knowlage_id = ? AND user_id = ?`,
+		knowledgeID, userID,
+	)
 	if err != nil {
 		log.Printf("DeleteKnowledge ERROR: %v\n", err)
-		return err
+		return apperr.NewDatabase(err)
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		return apperr.NewNotFound("Knowledge")
+	}
+
+	if err := tx.Commit(); err != nil {
+		return apperr.NewDatabase(err)
 	}
 	return nil
 }

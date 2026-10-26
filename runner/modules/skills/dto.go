@@ -34,3 +34,16 @@ type SkillResponseDTO struct {
 	CountResources  int    `db:"resources_count" json:"countResources"`
 	CountKnowledges int    `db:"knowledge_count" json:"countKnowledges"`
 }
+
+// filters
+type SkillFilters struct {
+	Search string
+	SortBy string
+	Order  string
+}
+
+// update
+type UpdateSkillRequestDTO struct {
+	Name  string `json:"name"`
+	Color string `json:"color"`
+}

@@ -13,6 +13,7 @@ func RegisterRoutes(r chi.Router, h *KnowledgeHandler) {
 		r.Get("/knowledges", response.Handle(h.GetKnowledgeByUser))      // get all knowledges by user
 		r.Post("/knowledges", response.Handle(h.CreateKnowledge))        // create new knowledge
 		r.Delete("/knowledges/{id}", response.Handle(h.DeleteKnowledge)) // delete a knowledge
+		r.Put("/knowledges/{id}", response.Handle(h.UpdateKnowledge))
 	})
 
 }

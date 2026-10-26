@@ -10,6 +10,7 @@ import {
 import Login from './pages/Login';
 import Skills from './pages/Skills';
 import ProtectedRoute from './pages/ProtectedRoute';
+import Knowledges from './pages/Knowledges';
 
 /*function Root() {
   return (
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/skills",
         element: <Skills />,
+      },
+      {
+        path: "/knowledges",
+        element: <Knowledges />,
       },
     ],
   },

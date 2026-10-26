@@ -43,15 +43,23 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// get all skills by user, with optional search and sorting
 func (h *Handler) GetSkillsByUser(w http.ResponseWriter, r *http.Request) error {
 
 	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
 
-	skills, err := h.svc.GetSkillByUser(r.Context(), userID)
+	q := r.URL.Query()
+	filters := SkillFilters{
+		Search: q.Get("search"),
+		SortBy: q.Get("sort_by"),
+		Order:  q.Get("order"),
+	}
+
+	skills, err := h.svc.GetSkillByUser(r.Context(), userID, filters)
 	if err != nil {
 		return err
 	}
-	response.Created(w, r, skills, "Skills by user")
+	response.OK(w, r, skills, "Skills by user")
 	return nil
 }
 
@@ -79,5 +87,29 @@ func (h *Handler) DeleteById(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	response.OK(w, r, nil, "Skill deleted successfully!")
+	return nil
+}
+
+// update skill name and color
+func (h *Handler) UpdateSkill(w http.ResponseWriter, r *http.Request) error {
+
+	var req UpdateSkillRequestDTO
+
+	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
+
+	skillID, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil || skillID <= 0 {
+		return apperr.NewValidation("Invalid skill id")
+	}
+
+	if err := response.DecodeJSON(w, r, &req); err != nil {
+		return err
+	}
+
+	skill, err := h.svc.UpdateSkill(r.Context(), userID, skillID, req)
+	if err != nil {
+		return err
+	}
+	response.OK(w, r, skill, "Skill updated")
 	return nil
 }

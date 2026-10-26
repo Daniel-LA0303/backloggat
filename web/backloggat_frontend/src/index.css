@@ -423,3 +423,22 @@ input:focus-visible+.cbx {
     scrollbar-color: rgba(150, 190, 168, 0.35) transparent;
   }
 }
+
+
+.rich-text .tiptap { outline: none; min-height: 8rem; color: #F2F2F2; font-size: 0.875rem; }
+.rich-text .tiptap > * + * { margin-top: 0.6em; }
+.rich-text .tiptap h2 { font-size: 1.25rem; font-weight: 600; }
+.rich-text .tiptap h3 { font-size: 1.1rem; font-weight: 600; }
+.rich-text .tiptap ul { list-style: disc; padding-left: 1.25rem; }
+.rich-text .tiptap ol { list-style: decimal; padding-left: 1.25rem; }
+.rich-text .tiptap blockquote { border-left: 3px solid #8FD3AE66; padding-left: 0.75rem; color: #A7B5AD; }
+.rich-text .tiptap code { background: #ffffff14; border-radius: 4px; padding: 0.1em 0.35em; }
+.rich-text .tiptap pre { background: #00000055; border-radius: 8px; padding: 0.75rem; overflow-x: auto; }
+.rich-text .tiptap pre code { background: none; padding: 0; }
+.rich-text .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #A7B5AD80;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

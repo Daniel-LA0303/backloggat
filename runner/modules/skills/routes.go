@@ -14,6 +14,7 @@ func RegisterRoutes(r chi.Router, h *Handler) {
 		r.Get("/skills", response.Handle(h.GetSkillsByUser)) // get all skills by user
 		r.Get("/skills/{id}", response.Handle(h.GetByID))
 		r.Delete("/skills/{id}", response.Handle(h.DeleteById)) // delete one skill
+		r.Put("/skills/{id}", response.Handle(h.UpdateSkill))   // delete one skill
 	})
 
 }

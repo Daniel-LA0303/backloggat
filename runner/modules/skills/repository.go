@@ -5,7 +5,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -60,10 +62,18 @@ func (r *Repository) ExistsByName(ctx context.Context, userID int64, name string
 	return n > 0, nil
 }
 
-func (r *Repository) ListSkills(userID int64) ([]SkillResponseDTO, error) {
+// helpers to filter
+var skillSortColumns = map[string]string{
+	"name":       "s.name",
+	"created_at": "s.created_at",
+}
+
+var likeEscaper = strings.NewReplacer(`\`, `\\`, `%`, `\%`, `_`, `\_`)
+
+func (r *Repository) ListSkills(userID int64, f SkillFilters) ([]SkillResponseDTO, error) {
 	skills := []SkillResponseDTO{}
-	err := r.db.Select(&skills,
-		`SELECT 
+
+	query := `SELECT 
 			s.skill_id, 
 			s.user_id, 
 			s.name, 
@@ -89,15 +99,56 @@ func (r *Repository) ListSkills(userID int64) ([]SkillResponseDTO, error) {
              WHERE ks.skill_id = s.skill_id) AS knowledge_count
 
 		 FROM skills_tbl s
-		 WHERE s.user_id = ?
-		 ORDER BY s.name`,
-		userID,
-	)
-	if err != nil {
+		 WHERE s.user_id = ?`
+
+	args := []any{userID}
+
+	if f.Search != "" {
+		query += ` AND s.name LIKE ?`
+		args = append(args, "%"+likeEscaper.Replace(f.Search)+"%")
+	}
+
+	col, ok := skillSortColumns[f.SortBy]
+	if !ok {
+		col = "s.name"
+	}
+	dir := "ASC"
+	if f.Order == "desc" {
+		dir = "DESC"
+	}
+	// skill_id como desempate para que el orden sea estable
+	query += fmt.Sprintf(` ORDER BY %s %s, s.skill_id ASC`, col, dir)
+
+	if err := r.db.Select(&skills, query, args...); err != nil {
 		log.Printf("ListSkills ERROR: %v\n", err)
 		return nil, err
 	}
 	return skills, nil
+}
+
+func (r *Repository) UpdateSkill(
+	userID, skillID int64,
+	req UpdateSkillRequestDTO,
+) (*SkillResponseDTO, error) {
+
+	var skill SkillResponseDTO
+	err := r.db.Get(&skill,
+		`UPDATE skills_tbl
+		 SET name = ?,
+		     color = ?,
+		     updated_at = datetime('now')
+		 WHERE skill_id = ? AND user_id = ?
+		 RETURNING skill_id, user_id, name, color, created_at, updated_at`,
+		req.Name, req.Color, skillID, userID,
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, apperr.NewNotFound("Skill")
+	}
+	if err != nil {
+		log.Printf("UpdateSkill ERROR: %v\n", err)
+		return nil, apperr.NewDatabase(err)
+	}
+	return &skill, nil
 }
 
 /****
