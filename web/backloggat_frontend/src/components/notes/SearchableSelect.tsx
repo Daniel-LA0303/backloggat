@@ -87,7 +87,7 @@ export function SearchableSelect({
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 z-50 mt-2 rounded-xl border border-[#96bea8]/25 bg-[#0e1612]/95 p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <div className="absolute left-0 right-0 z-50 mt-2 rounded-xl border border-[#96bea8]/25 bg-[#0e1612]/95 p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl glass-scroll">
           <input
             ref={inputRef}
             value={query}

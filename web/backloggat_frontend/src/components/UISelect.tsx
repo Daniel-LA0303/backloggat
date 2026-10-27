@@ -178,7 +178,7 @@ export function UISelect({
                 onClick={() => setOpen((o) => !o)}
                 onKeyDown={onKeyDown}
                 className={`
-                    flex w-full items-center justify-between gap-2
+                    flex w-full items-center justify-between gap-2 cursor-pointer
                     rounded-xl border text-left text-white
                     backdrop-blur-xl backdrop-saturate-150
                     shadow-[inset_0_1px_0_rgba(255,255,255,0.10),inset_0_2px_6px_rgba(0,0,0,0.25)]

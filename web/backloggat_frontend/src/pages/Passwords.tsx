@@ -8,11 +8,11 @@ import { PasswordFormModal, type PasswordPayload } from "../components/passwords
 import Circles from "../components/Circles";
 import { ScreenSpinner } from "../components/ScreenSpinnerProps";
 import { DockMenu } from "../components/DockMenu";
-import { GearIcon } from "../utils/iconsUtils";
 import { PasswordCard } from "../components/passwords/PasswordCard";
 import { VaultSetupModal } from "../components/passwords/VaultSetupModal";
 import { RevealModal } from "../components/passwords/RevealModal";
 import Modal from "../components/Modal";
+import { getMenuItems } from "../utils/globalUtils";
 
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner
 
@@ -121,13 +121,8 @@ const Passwords = () => {
       </div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 py-10">
-        <DockMenu
-          items={[
-            { label: "Home", onClick: () => navigate("/") },
-            { label: "Profile", onClick: () => navigate("/profile") },
-            { label: "Settings", icon: <GearIcon size={16} />, onClick: () => navigate("/profile") },
-          ]}
-        />
+
+        <DockMenu items={getMenuItems(navigate)} />
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-3xl">Your passwords</p>

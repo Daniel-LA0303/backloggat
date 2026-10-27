@@ -15,9 +15,9 @@ import { ResourceFormModal, type ResourcePayload } from "../components/resources
 import { ScreenSpinner } from "../components/ScreenSpinnerProps";
 import Circles from "../components/Circles";
 import { DockMenu } from "../components/DockMenu";
-import { GearIcon } from "../utils/iconsUtils";
 import { ResourceRow } from "../components/resources/ResourceRow";
 import Modal from "../components/Modal";
+import { getMenuItems } from "../utils/globalUtils";
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
 
 type SortKey = "name" | "created_at" | "type";
@@ -133,13 +133,8 @@ const Resources = () => {
       </div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 py-10">
-        <DockMenu
-          items={[
-            { label: "Home", onClick: () => navigate("/") },
-            { label: "Profile", onClick: () => navigate("/profile") },
-            { label: "Settings", icon: <GearIcon size={16} />, onClick: () => navigate("/profile") },
-          ]}
-        />
+
+        <DockMenu items={getMenuItems(navigate)} />
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-3xl">Your resources</p>

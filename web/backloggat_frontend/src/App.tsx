@@ -12,6 +12,11 @@ import Knowledges from './pages/Knowledges';
 import Passwords from './pages/Passwords';
 import Resources from './pages/Resources';
 import Notes from './pages/Notes';
+import Lists from './pages/Lists';
+import ListDays from './pages/ListDays';
+import DayView from './pages/Lists/DayView';
+import Projects from './pages/Projects/Projects';
+import ProjectView from './pages/Projects/ProjectView';
 
 /*function Root() {
   return (
@@ -53,6 +58,30 @@ const router = createBrowserRouter([
       {
         path: "/notes",
         element: <Notes />,
+      },
+      {
+        path: "/",
+        element: <Lists />,
+      },
+      {
+        path: "/lists",
+        element: <Lists />,
+      },
+      {
+        path: "/lists/:id",
+        element: <ListDays />,
+      },
+      {
+        path: "/lists/:id/days/:dayId",
+        element: <DayView />,
+      },
+      {
+        path: "/projects",
+        element: <Projects />,
+      },
+      {
+        path: "/projects/:id",
+        element: <ProjectView />,
       },
     ],
   },

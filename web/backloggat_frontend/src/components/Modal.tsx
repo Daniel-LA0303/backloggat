@@ -25,7 +25,7 @@ const Modal = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.18 }}
                 onClick={onClose}
-                className="fixed flex inset-0 z-50 bg-[#00000073] backdrop-blur-lg items-center justify-center p-3 md:p-16"
+                className="fixed flex inset-0 z-50 bg-[#00000073] backdrop-blur-lg items-center justify-center p-3 md:p-16 "
             >
                 <motion.div
                     key="panel"
@@ -34,20 +34,20 @@ const Modal = ({
                     exit={{ opacity: 0, scale: 0.92, y: 12 }}
                     transition={{ duration: 0.18, type: 'spring', stiffness: 400, damping: 28 }}
                     onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                    className={`rise h-8/12 overflow-y-auto glass-scroll glass glass-hi corners backdrop-blur-md overflow-hidden rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.18)] ${className}`}
+                    className={`rise glass glass-hi corners backdrop-blur-md flex flex-col overflow-hidden rounded-2xl h-auto max-h-[85dvh] shadow-[0_24px_64px_rgba(0,0,0,0.18)] ${className}`}
                 >
-                    <div className='flex sticky top-0 z-10 w-full justify-between'>
-                        <p className='mt-5 ml-3 font-bold text-2xl'>{title && title}</p>
-                        <button
-                            className='p-3 text-2xl cursor-pointer'
-                            onClick={onClose}
-                        >
-                            <CloseIcon
-                                size={20}
-                            />
+                    {/* Header: fixed, never scrolls */}
+                    <div className='flex shrink-0 w-full justify-between'>
+                        <p className='mt-5 ml-3 font-bold text-2xl'>{title}</p>
+                        <button className='p-3 text-2xl cursor-pointer' onClick={onClose}>
+                            <CloseIcon size={20} />
                         </button>
                     </div>
-                    {children}
+
+                    {/* Content: the only scrollable area */}
+                    <div className='glass-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden'>
+                        {children}
+                    </div>
                 </motion.div>
             </motion.div>
         )}

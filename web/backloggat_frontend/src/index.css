@@ -389,10 +389,19 @@ input:focus-visible+.cbx {
   }
 }
 
+.glass-scroll {
+  overscroll-behavior: contain;
+}
+
 /* scroll styles */
 .glass-scroll::-webkit-scrollbar {
   width: 8px;   /* vertical */
   height: 8px;  /* horizontal */
+}
+
+.glass-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 12px; 
 }
 
 .glass-scroll::-webkit-scrollbar-track,

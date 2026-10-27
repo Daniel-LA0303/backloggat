@@ -10,10 +10,10 @@ import { NoteFormModal, type NotePayload } from "../components/notes/NoteFormMod
 import { ScreenSpinner } from "../components/ScreenSpinnerProps";
 import { DockMenu } from "../components/DockMenu";
 import Circles from "../components/Circles";
-import { GearIcon } from "../utils/iconsUtils";
 import { NoteCard } from "../components/notes/NoteCard";
 import Modal from "../components/Modal";
 import { SearchableSelect } from "../components/notes/SearchableSelect";
+import { getMenuItems } from "../utils/globalUtils";
 
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
 
@@ -143,13 +143,8 @@ const fetchItems = useCallback(async () => {
             </div>
 
             <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 py-10">
-                <DockMenu
-                    items={[
-                        { label: "Home", onClick: () => navigate("/") },
-                        { label: "Profile", onClick: () => navigate("/profile") },
-                        { label: "Settings", icon: <GearIcon size={16} />, onClick: () => navigate("/profile") },
-                    ]}
-                />
+
+                <DockMenu items={getMenuItems(navigate)} />
 
                 <div className="flex items-center justify-between gap-3">
                     <p className="text-3xl">Your notes</p>

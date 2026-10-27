@@ -35,7 +35,7 @@ export function DockMenu({ items }: { items: DockItem[] }) {
                     className="
                         grid h-10 w-10 shrink-0 place-items-center rounded-xl
                         text-[#9fd0b4] transition-colors duration-200
-                        hover:bg-[#96bea8]/15 hover:text-white
+                        hover:bg-[#96bea8]/15 hover:text-white cursor-pointer
                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#96bea8]/40
                     "
                 >
@@ -71,7 +71,7 @@ export function DockMenu({ items }: { items: DockItem[] }) {
                                     text-[13px] text-white/75
                                     transition-[opacity,transform,background-color,color] duration-300
                                     hover:bg-[#96bea8]/15 hover:text-white
-                                    active:translate-y-px
+                                    active:translate-y-px cursor-pointer
                                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#96bea8]/40
                                     ${i === 0 ? 'ml-1.5' : ''}
                                     ${open ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0'}

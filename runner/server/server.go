@@ -3,7 +3,9 @@ package server
 import (
 	"backloggat/internal/config"
 	"backloggat/runner/modules/knowledge"
+	"backloggat/runner/modules/lists"
 	"backloggat/runner/modules/notes"
+	"backloggat/runner/modules/projects"
 	"backloggat/runner/modules/resources"
 	"backloggat/runner/modules/skills"
 	"backloggat/runner/modules/user"
@@ -50,6 +52,14 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 	noteSvc := notes.NewNoteService(noteRepo)
 	noteHandler := notes.NewNoteHandler(noteSvc)
 
+	listRepo := lists.NewListRepository(db)
+	listSvc := lists.NewListService(listRepo)
+	listHandler := lists.NewListHandler(listSvc)
+
+	proRepo := projects.NewProjectRepository(db)
+	proSvc := projects.NewProjectService(proRepo)
+	proHandler := projects.NewProjectHandler(proSvc)
+
 	// 2. ROUTER
 	r := chi.NewRouter()
 	r.Use(chimw.Logger, chimw.Recoverer)
@@ -74,6 +84,8 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 		vault.RegisterRoutes(api, passHanlder)
 		resources.RegisterRoutes(api, resoHandler)
 		notes.RegisterRoutes(api, noteHandler)
+		lists.RegisterRoutes(api, listHandler)
+		projects.RegisterRoutes(api, proHandler)
 		// projects.RegisterRoutes(api, projectsHandler)  <- later
 	})
 
