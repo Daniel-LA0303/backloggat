@@ -17,6 +17,7 @@ import ListDays from './pages/ListDays';
 import DayView from './pages/Lists/DayView';
 import Projects from './pages/Projects/Projects';
 import ProjectView from './pages/Projects/ProjectView';
+import SkillView from './pages/Skills/SkillView';
 
 /*function Root() {
   return (
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/skills",
         element: <Skills />,
+      },
+      {
+        path: "/skills/:id",
+        element: <SkillView />,
       },
       {
         path: "/knowledges",

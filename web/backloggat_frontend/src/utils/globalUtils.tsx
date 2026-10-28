@@ -2,7 +2,7 @@
 
 
 import type { NavigateFunction } from "react-router-dom";
-import {KnowledgeIcon, MonthIcon, NotesIcon, PasswordsIcon, ProjectsIcon, ResourcesIcon, SkillsIcon } from "./iconsUtils";
+import { KnowledgeIcon, MonthIcon, NotesIcon, PasswordsIcon, ProjectsIcon, ResourcesIcon, SkillsIcon } from "./iconsUtils";
 
 export const getMenuItems = (navigate: NavigateFunction) => [
   {
@@ -26,9 +26,9 @@ export const getMenuItems = (navigate: NavigateFunction) => [
     onClick: () => navigate("/knowledges"),
   },
   {
-    label: "Passwords",
-    icon: <PasswordsIcon size={16} />,
-    onClick: () => navigate("/passwords"),
+    label: "Notes",
+    icon: <NotesIcon size={16} />,
+    onClick: () => navigate("/notes"),
   },
   {
     label: "Resources",
@@ -36,8 +36,8 @@ export const getMenuItems = (navigate: NavigateFunction) => [
     onClick: () => navigate("/resources"),
   },
   {
-    label: "Notes",
-    icon: <NotesIcon size={16} />,
-    onClick: () => navigate("/notes"),
+    label: "Passwords",
+    icon: <PasswordsIcon size={16} />,
+    onClick: () => navigate("/passwords"),
   },
 ];

@@ -15,6 +15,7 @@ export type KnowledgePayload = {
 type Props = {
   open: boolean;
   knowledge?: KnowledgeInfo | null;
+  defaultSkillIds?: number[];
   skills: SkillInfo[]; // available skills to link (create only)
   onClose: () => void;
   onSubmit: (payload: KnowledgePayload) => Promise<boolean>;
@@ -23,7 +24,7 @@ type Props = {
 const DEFAULT_COLOR = "#64748b";
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
-export function KnowledgeFormModal({ open, knowledge, skills, onClose, onSubmit }: Props) {
+export function KnowledgeFormModal({ open, knowledge, skills, onClose, onSubmit, defaultSkillIds }: Props) {
   const isEdit = !!knowledge;
 
   const [name, setName] = useState("");
@@ -38,7 +39,7 @@ export function KnowledgeFormModal({ open, knowledge, skills, onClose, onSubmit 
     setName(knowledge?.name ?? "");
     setDescription(knowledge?.description ?? "");
     setColor(knowledge?.color ?? DEFAULT_COLOR);
-    setSkillIds([]);
+    setSkillIds(defaultSkillIds ?? []);
     setErrors({});
   }, [open, knowledge]);
 
@@ -74,7 +75,7 @@ export function KnowledgeFormModal({ open, knowledge, skills, onClose, onSubmit 
       className="w-full md:max-w-2xl"
       title={isEdit ? "Edit knowledge" : "New knowledge"}
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-3">
         <div>
           <UITextField
             label="Name"
@@ -144,14 +145,14 @@ export function KnowledgeFormModal({ open, knowledge, skills, onClose, onSubmit 
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+            className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+            className="rounded-lg cursor-pointer border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
           >
             {saving ? "Saving..." : isEdit ? "Save changes" : "Create"}
           </button>

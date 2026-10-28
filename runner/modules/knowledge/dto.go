@@ -42,7 +42,8 @@ func (r *UpdateKnowledge) Validate() error {
 }
 
 type KnowledgeFilters struct {
-	Search string
-	SortBy string
-	Order  string
+	Search  string
+	SortBy  string
+	Order   string
+	SkillId int64
 }

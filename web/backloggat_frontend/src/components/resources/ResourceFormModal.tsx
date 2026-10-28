@@ -28,11 +28,12 @@ type Props = {
     extra?: { noteId?: number; projectId?: number };
     onClose: () => void;
     onSubmit: (payload: ResourcePayload) => Promise<boolean>;
+    defaultSkillIds?: number[];
 };
 
 const LINK_RE = /^https?:\/\/\S+$/;
 
-export function ResourceFormModal({ open, resource, skills, extra, onClose, onSubmit }: Props) {
+export function ResourceFormModal({ open, resource, skills, extra, onClose, onSubmit, defaultSkillIds }: Props) {
     const isEdit = !!resource;
 
     const [name, setName] = useState("");
@@ -49,7 +50,7 @@ export function ResourceFormModal({ open, resource, skills, extra, onClose, onSu
         setName(resource?.name ?? "");
         setLink(resource?.link ?? "");
         setType(resource?.type ?? "article");
-        setSkillIds(resource?.skills.map((s) => s.id) ?? []);
+        setSkillIds(resource?.skills.map((s) => s.id) ?? defaultSkillIds ?? []);
         setKeptNotes(resource?.noteIds ?? []);
         setKeptProjects(resource?.projectIds ?? []);
         setErrors({});

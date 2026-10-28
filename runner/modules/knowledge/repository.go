@@ -64,6 +64,11 @@ func (r *KnowledgeRepository) ListKnowledge(userId int64, f KnowledgeFilters) ([
 		query += ` AND name LIKE ? ESCAPE '\'`
 		args = append(args, "%"+likeEscaper.Replace(f.Search)+"%")
 	}
+	if f.SkillId > 0 {
+		query += ` AND EXISTS (SELECT 1 FROM knowlage_skills_tbl fs
+	           WHERE fs.knowlage_id = knowlage_tbl.knowlage_id AND fs.skill_id = ?)`
+		args = append(args, f.SkillId)
+	}
 
 	col, ok := knowledgeSortColumns[f.SortBy]
 	if !ok {

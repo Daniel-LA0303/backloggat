@@ -5,6 +5,7 @@ import (
 	"backloggat/runner/platform/apperr"
 	"backloggat/runner/platform/response"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -33,10 +34,15 @@ func (h *KnowledgeHandler) GetKnowledgeByUser(w http.ResponseWriter, r *http.Req
 	userID, _ := strconv.ParseInt(jwt.GetUserIdFromContext(r.Context()), 10, 64)
 
 	q := r.URL.Query()
+
+	skillID, err := optionalID(q, "skill_id")
+	if err != nil {
+		return err
+	}
+
 	filters := KnowledgeFilters{
-		Search: q.Get("search"),
-		SortBy: q.Get("sort_by"),
-		Order:  q.Get("order"),
+		Search: q.Get("search"), SkillId: skillID,
+		SortBy: q.Get("sort_by"), Order: q.Get("order"),
 	}
 
 	items, err := h.svc.GetKnowledgesByUser(r.Context(), userID, filters)
@@ -108,4 +114,16 @@ func (h *KnowledgeHandler) DeleteKnowledge(w http.ResponseWriter, r *http.Reques
 	}
 	response.OK(w, r, nil, "Knowledge deleted successfully")
 	return nil
+}
+
+func optionalID(q url.Values, key string) (int64, error) {
+	raw := q.Get(key)
+	if raw == "" {
+		return 0, nil
+	}
+	id, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil || id <= 0 {
+		return 0, apperr.NewValidation("Invalid " + key)
+	}
+	return id, nil
 }

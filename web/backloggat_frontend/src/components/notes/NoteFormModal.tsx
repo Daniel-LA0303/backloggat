@@ -26,13 +26,14 @@ type Props = {
   resources: ResourceInfo[];
   extra?: { projectId?: number };
   onClose: () => void;
+  defaultSkillIds?: number[];
   onSubmit: (payload: NotePayload) => Promise<boolean>;
 };
 
 const DEFAULT_COLOR = "#64748b";
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
-export function NoteFormModal({ open, note, skills, resources, extra, onClose, onSubmit }: Props) {
+export function NoteFormModal({ open, note, skills, resources, extra, onClose, onSubmit, defaultSkillIds }: Props) {
   const isEdit = !!note;
 
   const [title, setTitle] = useState("");
@@ -54,7 +55,7 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
     setDescription(note?.description ?? "");
     setContent(note?.content ?? "");
     setPinned(note?.pinned ?? false);
-    setSkillIds(note?.skills.map((s) => s.id) ?? []);
+    setSkillIds(note?.skills.map((s) => s.id) ?? defaultSkillIds ?? []);
     setResourceIds(note?.resources.map((r) => r.id) ?? []);
     setKeptProjects(note?.projectIds ?? []);
     setErrors({});
