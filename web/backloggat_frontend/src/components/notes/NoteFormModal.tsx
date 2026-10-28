@@ -100,9 +100,9 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
 
     const payload: NotePayload = note
       ? {
-          ...base,
-          removeProjectsIds: note.projectIds.filter((id) => !keptProjects.includes(id)),
-        }
+        ...base,
+        removeProjectsIds: note.projectIds.filter((id) => !keptProjects.includes(id)),
+      }
       : { ...base, ...extra };
 
     setSaving(true);
@@ -158,7 +158,7 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
               value={HEX_RE.test(color) ? color : DEFAULT_COLOR}
               onChange={(e) => setColor(e.target.value)}
               aria-label="Pick a color"
-              className="h-11 mb-7 w-14 shrink-0 cursor-pointer rounded-lg border border-white/10 bg-black/20 p-1"
+              className="h-11  w-14 shrink-0 cursor-pointer rounded-lg border border-white/10 bg-black/20 p-1"
             />
             <div className="flex-1">
               <UITextField
@@ -264,7 +264,7 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
           Pin this note
         </label>
 
-                <RichTextEditor
+        <RichTextEditor
           label="Content"
           value={content}
           onChange={setContent}

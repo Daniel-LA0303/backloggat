@@ -451,3 +451,22 @@ input:focus-visible+.cbx {
   height: 0;
   pointer-events: none;
 }
+
+.rich-text-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.rich-text .rich-text-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.rich-text .rich-text-image[style*="text-align: center"] {
+  margin-left: auto;
+  margin-right: auto;
+}

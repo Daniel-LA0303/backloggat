@@ -64,7 +64,7 @@ export function SkillListTab<T extends { id: number }, K extends string>({
         <button
           type="button"
           onClick={action.onClick}
-          className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+          className="rounded-lg border cursor-pointer border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
         >
           {action.label}
         </button>

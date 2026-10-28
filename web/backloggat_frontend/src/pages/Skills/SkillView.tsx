@@ -6,7 +6,7 @@ import type { ResourceInfo } from "../../interfaces/resources.interfaces";
 import { ScreenSpinner } from "../../components/ScreenSpinnerProps";
 import Circles from "../../components/Circles";
 import { DockMenu } from "../../components/DockMenu";
-import { GearIcon } from "../../utils/iconsUtils";
+import { ArrowLeftIcon, } from "../../utils/iconsUtils";
 import { SkillListTab } from "../../components/skills/SkillListTab";
 import type { KnowledgeInfo } from "../../interfaces/knowledge.interfaces";
 import { KnowledgeCard } from "../../components/knowledge/KnowledgeCard";
@@ -18,6 +18,7 @@ import { ProjectCard } from "../../components/projects/ProjectCard";
 import { KnowledgeFormModal, type KnowledgePayload } from "../../components/knowledge/KnowledgeFormModal";
 import { NoteFormModal, type NotePayload } from "../../components/notes/NoteFormModal";
 import { ResourceFormModal, type ResourcePayload } from "../../components/resources/ResourceFormModal";
+import { getMenuItems } from "../../utils/globalUtils";
 
 
 type TabKey = "knowledge" | "notes" | "resources" | "projects";
@@ -110,13 +111,7 @@ const SkillView = () => {
       </div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 py-10">
-        <DockMenu
-          items={[
-            { label: "Home", onClick: () => navigate("/") },
-            { label: "Skills", onClick: () => navigate("/skills") },
-            { label: "Settings", icon: <GearIcon size={16} />, onClick: () => navigate("/profile") },
-          ]}
-        />
+        <DockMenu items={getMenuItems(navigate)} />
 
         {!skill ? (
           <p className="text-center text-[#A7B5AD]">Skill not found</p>
@@ -132,9 +127,10 @@ const SkillView = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/skills")}
-                  className="mb-1 text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2]"
+                  className="mb-1 flex items-center cursor-pointer text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2]"
                 >
-                  ← All skills
+                  <ArrowLeftIcon />
+                  <span className="ml-2 text-2xl">All skills</span>
                 </button>
                 <div className="flex items-center gap-3">
                   <span
@@ -146,7 +142,7 @@ const SkillView = () => {
               </div>
             </header>
 
-            <nav role="tablist" className="flex gap-1 overflow-x-auto border-b border-white/10">
+            <nav role="tablist" className="flex gap-1  border-b border-white/10">
               {tabs.map((t) => (
                 <button
                   key={t.key}
@@ -154,7 +150,7 @@ const SkillView = () => {
                   role="tab"
                   aria-selected={tab === t.key}
                   onClick={() => setTab(t.key)}
-                  className={`-mb-px shrink-0 border-b-2 px-4 py-2 text-sm transition ${
+                  className={`-mb-px shrink-0 border-b-2 px-4 py-2 text-sm transition cursor-pointer ${
                     tab === t.key
                       ? "border-[#8FD3AE] text-[#8FD3AE]"
                       : "border-transparent text-[#A7B5AD] hover:text-[#F2F2F2]"
@@ -224,7 +220,7 @@ const SkillView = () => {
                 searchPlaceholder="Search projects..."
                 emptyText="No projects use this skill yet"
                 emptyFilteredText="No projects match your search"
-                action={{ label: "Go to projects to create one →", onClick: () => navigate("/projects") }}
+                action={{ label: "Go to projects to create one", onClick: () => navigate("/projects") }}
                 renderItem={(p, i) => (
                   <ProjectCard project={p} index={i} onClick={(x) => navigate(`/projects/${x.id}`)} />
                 )}

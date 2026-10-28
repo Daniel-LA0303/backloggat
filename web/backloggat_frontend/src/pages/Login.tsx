@@ -35,7 +35,7 @@ const Login = () => {
     console.log(data);
 
     login(data, data.token);
-    navigate('/skills');
+    navigate('/');
   };
 
   if (loading) return <div className='h-screen'><ScreenSpinner /></div>

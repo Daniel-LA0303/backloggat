@@ -96,7 +96,7 @@ export function NotesTab({ projectId, reloadKey, onChanged, skills, resources }:
                         setEditing(null);
                         setFormOpen(true);
                     }}
-                    className="h-11 cursor-pointer mb-7 shrink-0 rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+                    className="h-11 cursor-pointer shrink-0 rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
                 >
                     New note
                 </button>
