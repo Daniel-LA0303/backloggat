@@ -14,6 +14,8 @@ import { NoteCard } from "../components/notes/NoteCard";
 import Modal from "../components/Modal";
 import { SearchableSelect } from "../components/notes/SearchableSelect";
 import { getMenuItems } from "../utils/globalUtils";
+import UIButton from "../components/UIButton";
+import { PlusIcon } from "../utils/iconsUtils";
 
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
 
@@ -51,22 +53,22 @@ const Notes = () => {
 
     const [skillFilter, setSkillFilter] = useState("");
 
-const fetchItems = useCallback(async () => {
-    const id = ++requestId.current;
+    const fetchItems = useCallback(async () => {
+        const id = ++requestId.current;
 
-    const params = new URLSearchParams();
-    if (debouncedSearch) params.set("search", debouncedSearch);
-    if (skillFilter) params.set("skill_id", skillFilter); // antes de la petición
-    params.set("sort_by", filters.sortBy);
-    params.set("order", filters.order);
+        const params = new URLSearchParams();
+        if (debouncedSearch) params.set("search", debouncedSearch);
+        if (skillFilter) params.set("skill_id", skillFilter); // antes de la petición
+        params.set("sort_by", filters.sortBy);
+        params.set("order", filters.order);
 
-    const data = await requestAuth<NoteInfo[]>(`/api/notes?${params}`, { method: "GET" });
-    if (id !== requestId.current) return;
+        const data = await requestAuth<NoteInfo[]>(`/api/notes?${params}`, { method: "GET" });
+        if (id !== requestId.current) return;
 
-    setFirstLoad(false);
-    if (data) setItems(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [debouncedSearch, skillFilter, filters.sortBy, filters.order]);
+        setFirstLoad(false);
+        if (data) setItems(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSearch, skillFilter, filters.sortBy, filters.order]);
 
     useEffect(() => {
         fetchItems();
@@ -148,13 +150,14 @@ const fetchItems = useCallback(async () => {
 
                 <div className="flex items-center justify-between gap-3">
                     <p className="text-3xl">Your notes</p>
-                    <button
+                    <UIButton
                         type="button"
                         onClick={openCreate}
-                        className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+                        size="medium"
+                        leftIcon={<PlusIcon />}
                     >
-                        + New note
-                    </button>
+                        New note
+                    </UIButton>
                 </div>
 
                 <ListFilters
@@ -177,7 +180,7 @@ const fetchItems = useCallback(async () => {
                         <button
                             type="button"
                             onClick={() => setSkillFilter("")}
-                            className="text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2]"
+                            className="text-xs text-[#A7B5AD] cursor-pointer transition hover:text-[#F2F2F2]"
                         >
                             Clear
                         </button>
@@ -220,25 +223,27 @@ const fetchItems = useCallback(async () => {
                 className="w-full md:max-w-sm"
                 title="Delete note"
             >
-                <p className="text-sm text-[#A7B5AD]">
-                    Delete <span className="text-[#F2F2F2]">{toDelete?.title}</span>? Its links to skills,
-                    resources and projects will be removed too.
-                </p>
-                <div className="mt-5 flex justify-end gap-2">
-                    <button
-                        type="button"
-                        onClick={() => setToDelete(null)}
-                        className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleConfirmDelete}
-                        className="rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20"
-                    >
-                        Delete
-                    </button>
+                <div className="p-3">
+                    <p className="text-sm text-[#A7B5AD]">
+                        Delete <span className="text-[#F2F2F2]">{toDelete?.title}</span>? Its links to skills,
+                        resources and projects will be removed too.
+                    </p>
+                    <div className="mt-5 flex justify-end gap-2">
+                        <button
+                            type="button"
+                            onClick={() => setToDelete(null)}
+                            className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleConfirmDelete}
+                            className="rounded-lg cursor-pointer border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20"
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </Modal>
         </>

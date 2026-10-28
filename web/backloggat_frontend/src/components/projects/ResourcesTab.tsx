@@ -47,9 +47,9 @@ export function ResourcesTab({ projectId, reloadKey, onChanged, skills }: Props)
                 <button
                     type="button"
                     onClick={() => setFormOpen(true)}
-                    className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+                    className="cursor-pointer rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
                 >
-                    + New resource
+                    New resource
                 </button>
             </div>
 

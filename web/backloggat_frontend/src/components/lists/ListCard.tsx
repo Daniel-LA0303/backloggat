@@ -1,5 +1,6 @@
 import type { ListInfo } from "../../interfaces/lists.interfaces";
 import { formatRange, todayISO } from "../../utils/datesUtils";
+import { DeleteIcon, EditIcon } from "../../utils/iconsUtils";
 import { ProgressBar } from "./ProgressBar";
 
 type Props = {
@@ -56,18 +57,20 @@ export function ListCard({ list, index = 0, onClick, onEdit, onDelete }: Props) 
                         <button
                             type="button"
                             onClick={action(onEdit)}
-                            className="rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
+                            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
                         >
-                            Edit
+                            <EditIcon size={13} />
+                            <span className="ml-2">Edit</span>
                         </button>
                     )}
                     {onDelete && (
                         <button
                             type="button"
                             onClick={action(onDelete)}
-                            className="rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
+                            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
                         >
-                            Delete
+                            <DeleteIcon size={13} />
+                            <span className="ml-2">Delete</span>
                         </button>
                     )}
                 </div>

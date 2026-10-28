@@ -148,7 +148,7 @@ const DayView = () => {
                                 <button
                                     type="button"
                                     onClick={() => navigate(`/lists/${listId}`)}
-                                    className="mb-1 text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2] flex items-center"
+                                    className="mb-1 cursor-pointer text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2] flex items-center"
                                 >
                                     <ArrowLeftIcon />
                                     <span className="text-2xl ml-2">Back to month</span>

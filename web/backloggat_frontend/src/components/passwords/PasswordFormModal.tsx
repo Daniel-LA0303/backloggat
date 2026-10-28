@@ -63,7 +63,7 @@ export function PasswordFormModal({ open, onClose, onSubmit }: Props) {
 
   return (
     <Modal open={open} onClose={onClose} className="w-full md:max-w-lg" title="New password">
-      <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-4 p-3">
         <div>
           <UITextField label="Name" value={form.name} onChange={set("name")} placeholder="e.g. Gmail" />
           {err("name")}
@@ -84,7 +84,7 @@ export function PasswordFormModal({ open, onClose, onSubmit }: Props) {
               className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-white/10 bg-black/20 p-1"
             />
             <div className="flex-1">
-              <UITextField label="Color" value={form.color} onChange={set("color")} placeholder="#64748b" />
+              <UITextField value={form.color} onChange={set("color")} placeholder="#64748b" />
             </div>
           </div>
           {err("color")}
@@ -103,11 +103,11 @@ export function PasswordFormModal({ open, onClose, onSubmit }: Props) {
 
         <div className="mt-2 flex justify-end gap-2">
           <button type="button" onClick={onClose} disabled={saving}
-            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
+            className="rounded-lg px-4 cursor-pointer py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
             Cancel
           </button>
           <button type="submit" disabled={saving}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50">
+            className="rounded-lg border cursor-pointer  border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50">
             {saving ? "Encrypting..." : "Save"}
           </button>
         </div>

@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 import { ListFilters, type ListFiltersValue } from "../components/UIListFilters";
 import { useApi } from "../context/ApiContext";
-import { 
-      RESOURCE_TYPES,
+import {
+  RESOURCE_TYPES,
   type ResourceDetail,
   type ResourceInfo,
- } from "../interfaces/resources.interfaces";
+} from "../interfaces/resources.interfaces";
 import type { SkillInfo } from "../interfaces/skills.interfaces";
 import { useDebounce } from "../hooks/useDebounce";
 import { ResourceFormModal, type ResourcePayload } from "../components/resources/ResourceFormModal";
@@ -18,6 +18,8 @@ import { DockMenu } from "../components/DockMenu";
 import { ResourceRow } from "../components/resources/ResourceRow";
 import Modal from "../components/Modal";
 import { getMenuItems } from "../utils/globalUtils";
+import UIButton from "../components/UIButton";
+import { PlusIcon } from "../utils/iconsUtils";
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
 
 type SortKey = "name" | "created_at" | "type";
@@ -120,10 +122,9 @@ const Resources = () => {
   const hasFilters = filters.search.trim() !== "" || typeFilter !== "";
 
   const typeChip = (active: boolean) =>
-    `rounded-full border px-3 py-1 text-xs transition ${
-      active
-        ? "border-[#8FD3AE]/50 bg-[#8FD3AE]/10 text-[#8FD3AE]"
-        : "border-white/10 bg-white/5 text-[#A7B5AD] hover:border-white/20"
+    `rounded-full border px-3 py-1 text-xs transition cursor-pointer ${active
+      ? "border-[#8FD3AE]/50 bg-[#8FD3AE]/10 text-[#8FD3AE]  "
+      : "border-white/10 bg-white/5 text-[#A7B5AD] hover:border-white/20"
     }`;
 
   return (
@@ -138,13 +139,14 @@ const Resources = () => {
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-3xl">Your resources</p>
-          <button
+          <UIButton
             type="button"
             onClick={openCreate}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+            leftIcon={<PlusIcon />}
+            size="medium"
           >
-            + New resource
-          </button>
+            New resource
+          </UIButton>
         </div>
 
         <ListFilters

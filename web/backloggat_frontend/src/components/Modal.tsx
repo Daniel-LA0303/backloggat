@@ -34,7 +34,7 @@ const Modal = ({
                     exit={{ opacity: 0, scale: 0.92, y: 12 }}
                     transition={{ duration: 0.18, type: 'spring', stiffness: 400, damping: 28 }}
                     onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                    className={`rise glass glass-hi corners backdrop-blur-md flex flex-col overflow-hidden rounded-2xl h-auto max-h-[85dvh] shadow-[0_24px_64px_rgba(0,0,0,0.18)] ${className}`}
+                    className={`rise glass glass-hi corners backdrop-blur-md flex flex-col overflow-hidden rounded-2xl max-h-[85dvh] shadow-[0_24px_64px_rgba(0,0,0,0.18)] ${className}`}
                 >
                     {/* Header: fixed, never scrolls */}
                     <div className='flex shrink-0 w-full justify-between'>
@@ -45,7 +45,7 @@ const Modal = ({
                     </div>
 
                     {/* Content: the only scrollable area */}
-                    <div className='glass-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden'>
+                    <div className='glass-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden'>
                         {children}
                     </div>
                 </motion.div>

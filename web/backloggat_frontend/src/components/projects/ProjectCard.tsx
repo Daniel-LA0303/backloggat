@@ -1,5 +1,6 @@
 import type { ProjectInfo } from "../../interfaces/projects.interfaces";
 import { formatRange, formatShort } from "../../utils/datesUtils";
+import { DeleteIcon } from "../../utils/iconsUtils";
 import { ProgressBar } from "../lists/ProgressBar";
 
 type Props = {
@@ -24,6 +25,7 @@ function Counter({ label, value }: { label: string; value: number }) {
 }
 
 export function ProjectCard({ project: p, index = 0, onClick, onDelete }: Props) {
+
     const done = p.status === "DONE";
 
     return (
@@ -68,9 +70,10 @@ export function ProjectCard({ project: p, index = 0, onClick, onDelete }: Props)
                             e.stopPropagation();
                             onDelete(p);
                         }}
-                        className="rounded-md px-2 py-1 text-[#A7B5AD] transition hover:bg-red-500/10 hover:text-red-300 focus-visible:opacity-100 group-hover:opacity-100 sm:opacity-0"
+                        className="rounded-md px-2 py-1 flex items-center text-[#A7B5AD] transition hover:bg-red-500/10 hover:text-red-300 focus-visible:opacity-100 group-hover:opacity-100 sm:opacity-0 cursor-pointer"
                     >
-                        Delete
+                        <DeleteIcon />
+                        <span className="ml-2">Delete</span>
                     </button>
                 </div>
             )}

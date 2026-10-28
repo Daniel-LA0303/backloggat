@@ -1,4 +1,5 @@
 import type { PasswordInfo } from "../../interfaces/passwords.interfaces";
+import { DeleteIcon, EditIcon, EyeIcon } from "../../utils/iconsUtils";
 
 type Props = {
   item: PasswordInfo;
@@ -49,16 +50,18 @@ export function PasswordCard({ item, index = 0, onShow, onDelete }: Props) {
           <button
             type="button"
             onClick={() => onShow?.(item)}
-            className="rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
+            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
           >
-            Show
+            <EyeIcon size={13}/>
+            <span className="ml-2">Show</span>
           </button>
           <button
             type="button"
             onClick={() => onDelete?.(item)}
-            className="rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
+            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
           >
-            Delete
+            <DeleteIcon size={13}/>
+            <span className="ml-2">Delete</span>
           </button>
         </div>
       </div>

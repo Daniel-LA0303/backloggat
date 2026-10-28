@@ -90,31 +90,31 @@ export function RevealModal({ open, item, onClose, onReveal }: Props) {
   return (
     <Modal open={open} onClose={onClose} className="w-full md:max-w-md" title={item?.name ?? "Password"}>
       {!data ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-3">
           <UITextField label="Master password" type="password" value={master}
             onChange={(e) => setMaster(e.target.value)} />
           {error && <p className="text-xs text-red-300">{error}</p>}
 
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose}
-              className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
+              className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
               Cancel
             </button>
             <button type="submit" disabled={loading || !master}
-              className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50">
+              className="rounded-lg cursor-pointer border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50">
               {loading ? "Checking..." : "Show"}
             </button>
           </div>
         </form>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 p-3">
           {row("Username", data.site_username)}
           {row("Password", data.password)}
 
           <div className="mt-1 flex items-center justify-between text-xs text-[#A7B5AD]">
             <span>Closes in {left}s</span>
             <button type="button" onClick={onClose}
-              className="rounded-lg px-4 py-2 text-sm transition hover:bg-white/5">
+              className="rounded-lg px-4 py-2 text-sm transition hover:bg-white/5 cursor-pointer">
               Close
             </button>
           </div>

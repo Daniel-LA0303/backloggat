@@ -127,14 +127,14 @@ const Lists = () => {
                         <button
                             type="button"
                             onClick={() => setToDelete(null)}
-                            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+                            className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleConfirmDelete}
-                            className="rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20"
+                            className="rounded-lg border cursor-pointer border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20"
                         >
                             Delete
                         </button>

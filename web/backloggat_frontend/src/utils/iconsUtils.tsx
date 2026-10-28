@@ -283,3 +283,35 @@ export const DeleteIcon = ({
     <path d="M10 11v5M14 11v5" />
   </IconBase>
 )
+
+export const EyeIcon = ({
+  size,
+  className
+}: {
+  size?: number,
+  className?: string
+}) => (
+  <IconBase
+    size={size}
+    className={`${className}`}
+  >
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+    <circle cx="12" cy="12" r="3" />
+  </IconBase>
+)
+
+export const CopyIcon = ({
+  size,
+  className
+}: {
+  size?: number,
+  className?: string
+}) => (
+  <IconBase
+    size={size}
+    className={`${className}`}
+  >
+    <rect x="8" y="8" width="13" height="13" rx="2" />
+    <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
+  </IconBase>
+)

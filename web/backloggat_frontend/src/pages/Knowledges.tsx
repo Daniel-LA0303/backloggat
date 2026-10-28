@@ -12,6 +12,8 @@ import { DockMenu } from "../components/DockMenu";
 import { KnowledgeCard } from "../components/knowledge/KnowledgeCard";
 import Modal from "../components/Modal";
 import { getMenuItems } from "../utils/globalUtils";
+import UIButton from "../components/UIButton";
+import { PlusIcon } from "../utils/iconsUtils";
 
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
 
@@ -125,13 +127,14 @@ const Knowledges = () => {
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-3xl">Your knowledge</p>
-          <button
+          <UIButton
             type="button"
+            size="medium"
+            leftIcon={<PlusIcon />}
             onClick={openCreate}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
           >
-            + New knowledge
-          </button>
+            New knowledge
+          </UIButton>
         </div>
 
         <ListFilters

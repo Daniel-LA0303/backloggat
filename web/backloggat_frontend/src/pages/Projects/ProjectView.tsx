@@ -103,7 +103,7 @@ const ProjectView = () => {
     ];
 
     return (
-        <>
+        <div className="h-auto">
             <div className="page-bg">
                 <Circles />
             </div>
@@ -145,7 +145,7 @@ const ProjectView = () => {
                                     role="tab"
                                     aria-selected={tab === t.key}
                                     onClick={() => setTab(t.key)}
-                                    className={`-mb-px shrink-0 border-b-2 px-4 py-2 text-sm transition ${tab === t.key
+                                    className={`cursor-pointer -mb-px shrink-0 border-b-2 px-4 py-2 text-sm transition ${tab === t.key
                                             ? "border-[#8FD3AE] text-[#8FD3AE]"
                                             : "border-transparent text-[#A7B5AD] hover:text-[#F2F2F2] cursor-pointer"
                                         }`}
@@ -191,7 +191,7 @@ const ProjectView = () => {
             />
 
             <ProjectTaskModal open={taskOpen} onClose={() => setTaskOpen(false)} onSubmit={handleCreateTask} />
-        </>
+        </div>
     );
 };
 

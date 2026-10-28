@@ -13,6 +13,8 @@ import { SearchableSelect } from "../../components/notes/SearchableSelect";
 import { ProjectCard } from "../../components/projects/ProjectCard";
 import Modal from "../../components/Modal";
 import { getMenuItems } from "../../utils/globalUtils";
+import UIButton from "../../components/UIButton";
+import { DeleteIcon, PlusIcon } from "../../utils/iconsUtils";
 
 
 type SortKey = "updated_at" | "created_at" | "title" | "start_date" | "progress";
@@ -103,7 +105,7 @@ const Projects = () => {
         }`;
 
     return (
-        <>
+        <div className="h-screen">
             <div className="page-bg">
                 <Circles />
             </div>
@@ -114,13 +116,15 @@ const Projects = () => {
 
                 <div className="flex items-center justify-between gap-3">
                     <p className="text-3xl">Your projects</p>
-                    <button
+                    
+                    <UIButton
                         type="button"
+                        leftIcon={<PlusIcon />}
+                        size="medium"
                         onClick={() => setFormOpen(true)}
-                        className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
                     >
-                        + New project
-                    </button>
+                        New project
+                    </UIButton>
                 </div>
 
                 <ListFilters
@@ -138,7 +142,7 @@ const Projects = () => {
                                 type="button"
                                 onClick={() => setStatusFilter(c.value)}
                                 aria-pressed={statusFilter === c.value}
-                                className={chip(statusFilter === c.value)}
+                                className={`${chip(statusFilter === c.value)} cursor-pointer `}
                             >
                                 {c.label}
                             </button>
@@ -157,7 +161,7 @@ const Projects = () => {
                         <button
                             type="button"
                             onClick={() => setSkillFilter("")}
-                            className="text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2]"
+                            className="text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2] cursor-pointer"
                         >
                             Clear
                         </button>
@@ -200,7 +204,7 @@ const Projects = () => {
                 className="w-full md:max-w-sm"
                 title="Delete project"
             >
-                <div className="p-5">
+                <div className="p-3">
                     <p className="text-sm text-[#A7B5AD]">
                         Delete <span className="text-[#F2F2F2]">{toDelete?.title}</span>? Its tasks are deleted,
                         except those that are also in a daily list. Notes and resources are kept, only unlinked.
@@ -209,21 +213,22 @@ const Projects = () => {
                         <button
                             type="button"
                             onClick={() => setToDelete(null)}
-                            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+                            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5 cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleConfirmDelete}
-                            className="rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20"
+                            className="rounded-lg border flex items-center border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20 cursor-pointer"
                         >
-                            Delete
+                            <DeleteIcon />
+                            <span className="ml-2">Delete</span>
                         </button>
                     </div>
                 </div>
             </Modal>
-        </>
+        </div>
     );
 };
 

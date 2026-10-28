@@ -31,7 +31,7 @@ const UITextField = ({
 
 
     return (
-        <div className='flex flex-col gap-1 mb-7'>
+        <div className='flex flex-col gap-1 mb-1'>
 
             {label && (
                 <label
@@ -47,7 +47,7 @@ const UITextField = ({
                 ${startAdornment ? 'px-2' : 'px-3'}
                 ${disabled ? 'bg-black/90' : 'bg-black/20'}
                 ${focused ? 'border border-solid' : 'border-[0.5px] border-solid'}
-                transition-colors duration-150
+                transition-colors duration-150 
                 `}
             >
                 {startAdornment}
@@ -63,7 +63,7 @@ const UITextField = ({
                     className={`
                         flex-1 min-w-0 w-full
                         border-none outline-none bg-transparent
-                        placeholder:text-white/35 caret-[#9fd0b4]
+                        placeholder:text-white/35 caret-[#9fd0b4] 
                         ${mono ? 'text-xs font-mono' : 'text-[13px]'}
                         py-3
                         ${multiline ? 'resize-none' : ''}

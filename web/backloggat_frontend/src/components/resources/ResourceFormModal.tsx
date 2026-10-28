@@ -136,37 +136,7 @@ export function ResourceFormModal({ open, resource, skills, extra, onClose, onSu
             className="w-full md:max-w-lg"
             title={isEdit ? "Edit resource" : "New resource"}
         >
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div>
-                    <UITextField
-                        label="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Go concurrency patterns"
-                    />
-                    {errors.name && <p className="mt-1 text-xs text-red-300">{errors.name}</p>}
-                </div>
-
-                <div>
-                    <UITextField
-                        label="Link"
-                        value={link}
-                        onChange={(e) => setLink(e.target.value)}
-                        placeholder="https://..."
-                    />
-                    {errors.link && <p className="mt-1 text-xs text-red-300">{errors.link}</p>}
-                </div>
-
-                <div>
-                    <p className="mb-1 text-sm text-[#A7B5AD]">Type</p>
-                    <UISelect value={type} onChange={(v) => setType(v as ResourceType)}>
-                        {RESOURCE_TYPES.map((t) => (
-                            <UISelect.Option key={t.value} value={t.value}>
-                                {t.label}
-                            </UISelect.Option>
-                        ))}
-                    </UISelect>
-                </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-3">
 
                 {skills.length > 0 && (
                     <div>
@@ -208,6 +178,19 @@ export function ResourceFormModal({ open, resource, skills, extra, onClose, onSu
                         )}
                     </div>
                 )}
+
+                <div>
+                    <p className="mb-1 text-sm text-[#A7B5AD]">Type</p>
+                    <UISelect value={type} onChange={(v) => setType(v as ResourceType)}>
+                        {RESOURCE_TYPES.map((t) => (
+                            <UISelect.Option key={t.value} value={t.value}>
+                                {t.label}
+                            </UISelect.Option>
+                        ))}
+                    </UISelect>
+                </div>
+
+
                 {isEdit && (
                     <>
                         {removable("Linked notes (click × to unlink)", keptNotes, "Note", (id) =>
@@ -219,19 +202,38 @@ export function ResourceFormModal({ open, resource, skills, extra, onClose, onSu
                     </>
                 )}
 
+                <div>
+                    <UITextField
+                        label="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="e.g. Go concurrency patterns"
+                    />
+                    {errors.name && <p className="mt-1 text-xs text-red-300">{errors.name}</p>}
+                </div>
+                <div>
+                    <UITextField
+                        label="Link"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        placeholder="https://..."
+                    />
+                    {errors.link && <p className="mt-1 text-xs text-red-300">{errors.link}</p>}
+                </div>
+
                 <div className="mt-2 flex justify-end gap-2">
                     <button
                         type="button"
                         onClick={onClose}
                         disabled={saving}
-                        className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+                        className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={saving}
-                        className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+                        className="rounded-lg cursor-pointer border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
                     >
                         {saving ? "Saving..." : isEdit ? "Save changes" : "Create"}
                     </button>

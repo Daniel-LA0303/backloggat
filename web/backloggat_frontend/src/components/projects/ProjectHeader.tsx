@@ -2,6 +2,7 @@ import DOMPurify from "dompurify";
 import type { ProjectDetail } from "../../interfaces/projects.interfaces";
 import { ProgressBar } from "../lists/ProgressBar";
 import { formatRange, formatShort } from "../../utils/datesUtils";
+import { ArrowLeftIcon } from "../../utils/iconsUtils";
 
 type Props = {
     project: ProjectDetail;
@@ -20,9 +21,10 @@ export function ProjectHeader({ project: p, onBack, onNewTask, onEdit }: Props) 
                     <button
                         type="button"
                         onClick={onBack}
-                        className="mb-1 text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2]"
+                        className="mb-1 flex items-center text-xs text-[#A7B5AD] transition hover:text-[#F2F2F2] cursor-pointer"
                     >
-                        ← All projects
+                        <ArrowLeftIcon />
+                        <span className="ml-2 text-2xl">All projects</span>
                     </button>
                     <div className="flex flex-wrap items-center gap-3">
                         <h1 className="text-2xl sm:text-3xl">{p.title}</h1>
@@ -44,14 +46,14 @@ export function ProjectHeader({ project: p, onBack, onNewTask, onEdit }: Props) 
                     <button
                         type="button"
                         onClick={onNewTask}
-                        className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+                        className="rounded-lg border border-[#8FD3AE]/40 cursor-pointer bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
                     >
-                        + New task
+                        New task
                     </button>
                     <button
                         type="button"
                         onClick={onEdit}
-                        className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-[#F2F2F2] transition hover:border-[#8FD3AE]/40"
+                        className="rounded-lg border cursor-pointer border-white/10 bg-white/5 px-4 py-2 text-sm text-[#F2F2F2] transition hover:border-[#8FD3AE]/40"
                     >
                         Edit project
                     </button>

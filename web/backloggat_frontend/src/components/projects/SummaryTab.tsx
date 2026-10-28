@@ -31,7 +31,7 @@ function Section({
                     <button
                         type="button"
                         onClick={action.onClick}
-                        className="text-xs text-[#8FD3AE] transition hover:underline"
+                        className="text-xs text-[#8FD3AE] transition hover:underline cursor-pointer"
                     >
                         {action.label}
                     </button>

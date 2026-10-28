@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { typeLabel, type ResourceInfo } from "../../interfaces/resources.interfaces";
+import { CopyIcon, DeleteIcon, EditIcon } from "../../utils/iconsUtils";
 
 
 type Props = {
@@ -21,11 +22,10 @@ function Counter({ label, value }: { label: string; value: number }) {
   return (
     <span
       title={`${value} ${label}`}
-      className={`num rounded-md border px-2 py-0.5 text-[11px] ${
-        value > 0
+      className={`num rounded-md border px-2 py-0.5 text-[11px] ${value > 0
           ? "border-white/10 bg-white/5 text-[#F2F2F2]"
           : "border-white/5 bg-transparent text-[#A7B5AD]/50"
-      }`}
+        }`}
     >
       {value} {label}
     </span>
@@ -78,26 +78,29 @@ export function ResourceRow({ item, index = 0, onEdit, onDelete }: Props) {
         <button
           type="button"
           onClick={copy}
-          className="rounded-md px-2 py-1 transition hover:bg-white/5 hover:text-[#F2F2F2]"
+          className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-white/5 hover:text-[#F2F2F2]"
         >
-          {copied ? "Copied" : "Copy"}
+          <CopyIcon size={13} />
+          <span className="ml-2">{copied ? "Copied" : "Copy"}</span>
         </button>
         {onEdit && (
           <button
             type="button"
             onClick={action(() => onEdit(item))}
-            className="rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
+            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
           >
-            Edit
+            <EditIcon size={13} />
+            <span className="ml-2">Edit</span>
           </button>
         )}
         {onDelete && (
           <button
             type="button"
             onClick={action(() => onDelete(item))}
-            className="rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
+            className="rounded-md cursor-pointer flex items-center px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
           >
-            Delete
+            <DeleteIcon size={13} />
+            <span className="ml-2">Delete</span>
           </button>
         )}
       </div>

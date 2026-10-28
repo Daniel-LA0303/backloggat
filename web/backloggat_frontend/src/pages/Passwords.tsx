@@ -13,6 +13,8 @@ import { VaultSetupModal } from "../components/passwords/VaultSetupModal";
 import { RevealModal } from "../components/passwords/RevealModal";
 import Modal from "../components/Modal";
 import { getMenuItems } from "../utils/globalUtils";
+import UIButton from "../components/UIButton";
+import { PlusIcon } from "../utils/iconsUtils";
 
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner
 
@@ -126,13 +128,14 @@ const Passwords = () => {
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-3xl">Your passwords</p>
-          <button
+          <UIButton
             type="button"
             onClick={openCreate}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20"
+            leftIcon={<PlusIcon />}
+            size="medium"
           >
-            + New password
-          </button>
+            New password
+          </UIButton>
         </div>
 
         {!hasVault && (
@@ -191,18 +194,20 @@ const Passwords = () => {
         className="w-full md:max-w-sm"
         title="Delete password"
       >
-        <p className="text-sm text-[#A7B5AD]">
-          Delete <span className="text-[#F2F2F2]">{toDelete?.name}</span>? This cannot be undone.
-        </p>
-        <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={() => setToDelete(null)}
-            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
-            Cancel
-          </button>
-          <button type="button" onClick={handleConfirmDelete}
-            className="rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20">
-            Delete
-          </button>
+        <div className="p-3">
+          <p className="text-sm text-[#A7B5AD]">
+            Delete <span className="text-[#F2F2F2]">{toDelete?.name}</span>? This cannot be undone.
+          </p>
+          <div className="mt-5 flex justify-end gap-2">
+            <button type="button" onClick={() => setToDelete(null)}
+              className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5">
+              Cancel
+            </button>
+            <button type="button" onClick={handleConfirmDelete}
+              className="rounded-lg cursor-pointer border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20">
+              Delete
+            </button>
+          </div>
         </div>
       </Modal>
     </>

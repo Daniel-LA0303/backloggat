@@ -66,7 +66,7 @@ const ListDays = () => {
                                 type="button"
                                 disabled={!today}
                                 onClick={() => today && navigate(`/lists/${list.id}/days/${today.id}`)}
-                                className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-40"
+                                className="rounded-lg border cursor-pointer border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-40"
                             >
                                 Today
                             </button>

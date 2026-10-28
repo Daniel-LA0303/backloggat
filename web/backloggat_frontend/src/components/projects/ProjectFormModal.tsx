@@ -65,8 +65,8 @@ function PickedChip({
     return (
         <span
             className={`flex items-center gap-2 rounded-full border py-1 pl-3 pr-1.5 text-xs ${danger
-                    ? "border-red-400/30 bg-red-500/10 text-red-200"
-                    : "border-[#8FD3AE]/40 bg-[#8FD3AE]/10 text-[#8FD3AE]"
+                ? "border-red-400/30 bg-red-500/10 text-red-200"
+                : "border-[#8FD3AE]/40 bg-[#8FD3AE]/10 text-[#8FD3AE]"
                 }`}
         >
             {dot && <span className="size-2 rounded-full" style={{ backgroundColor: dot }} />}
@@ -158,7 +158,7 @@ function NewResourceForm({
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="mt-2 text-xs text-[#8FD3AE] transition hover:underline"
+                className="mt-2 text-xs text-[#8FD3AE] transition hover:underline cursor-pointer"
             >
                 + New resource
             </button>
@@ -181,7 +181,7 @@ function NewResourceForm({
                 <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-1.5 text-xs text-[#A7B5AD] transition hover:bg-white/5"
+                    className="rounded-lg px-3 py-1.5 text-xs text-[#A7B5AD] transition hover:bg-white/5 cursor-pointer"
                 >
                     Cancel
                 </button>
@@ -189,7 +189,7 @@ function NewResourceForm({
                     type="button"
                     onClick={create}
                     disabled={busy}
-                    className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-3 py-1.5 text-xs text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+                    className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-3 py-1.5 text-xs text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50 cursor-pointer"
                 >
                     {busy ? "Creating..." : "Create and add"}
                 </button>
@@ -287,7 +287,7 @@ export function ProjectFormModal({
         <Modal
             open={open}
             onClose={onClose}
-            className="w-full md:max-w-3xl"
+            className="w-full h-auto md:max-w-3xl"
             title={isEdit ? "Edit project" : "New project"}
         >
             <form
@@ -296,20 +296,13 @@ export function ProjectFormModal({
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && (e.target as HTMLElement).tagName === "INPUT") e.preventDefault();
                 }}
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-4 p-3"
             >
                 <UITextField
                     label="Title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Personal website"
-                />
-
-                <RichTextEditor
-                    label="Description"
-                    value={description}
-                    onChange={setDescription}
-                    placeholder="What is this project about?"
                 />
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -430,6 +423,13 @@ export function ProjectFormModal({
                     </div>
                 )}
 
+                <RichTextEditor
+                    label="Description"
+                    value={description}
+                    onChange={setDescription}
+                    placeholder="What is this project about?"
+                />
+
                 {error && <p className="text-xs text-red-300">{error}</p>}
 
                 <div className="mt-2 flex justify-end gap-2">
@@ -437,14 +437,14 @@ export function ProjectFormModal({
                         type="button"
                         onClick={onClose}
                         disabled={saving}
-                        className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+                        className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5 cursor-pointer"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={saving}
-                        className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+                        className="rounded-lg border border-[#8FD3AE]/40 cursor-pointer bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
                     >
                         {saving ? "Saving..." : isEdit ? "Save changes" : "Create"}
                     </button>

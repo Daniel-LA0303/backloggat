@@ -139,7 +139,7 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
       className="w-full md:max-w-3xl"
       title={isEdit ? "Edit note" : "New note"}
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-3">
         <div>
           <UITextField
             label="Title"
@@ -157,11 +157,10 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
               value={HEX_RE.test(color) ? color : DEFAULT_COLOR}
               onChange={(e) => setColor(e.target.value)}
               aria-label="Pick a color"
-              className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-white/10 bg-black/20 p-1"
+              className="h-11 mb-7 w-14 shrink-0 cursor-pointer rounded-lg border border-white/10 bg-black/20 p-1"
             />
             <div className="flex-1">
               <UITextField
-                label="Color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder="#64748b"
@@ -182,13 +181,6 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
           />
           {errors.description && <p className="mt-1 text-xs text-red-300">{errors.description}</p>}
         </div>
-
-        <RichTextEditor
-          label="Content"
-          value={content}
-          onChange={setContent}
-          placeholder="Write your note..."
-        />
 
         {skills.length > 0 && (
           <div>
@@ -271,19 +263,26 @@ export function NoteFormModal({ open, note, skills, resources, extra, onClose, o
           Pin this note
         </label>
 
+                <RichTextEditor
+          label="Content"
+          value={content}
+          onChange={setContent}
+          placeholder="Write your note..."
+        />
+
         <div className="mt-2 flex justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+            className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+            className="rounded-lg border cursor-pointer border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
           >
             {saving ? "Saving..." : isEdit ? "Save changes" : "Create"}
           </button>

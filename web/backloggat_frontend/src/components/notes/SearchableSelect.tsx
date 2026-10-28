@@ -49,7 +49,7 @@ export function SearchableSelect({
   };
 
   const rowClass = (active: boolean) =>
-    `flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-[13px] transition-colors hover:bg-[#96bea8]/15 ${
+    `flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-[13px] transition-colors hover:bg-[#96bea8]/15 cursor-pointer ${
       active ? "text-[#b9e2cb]" : "text-white/75"
     }`;
 
@@ -60,7 +60,7 @@ export function SearchableSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`flex h-11 w-full items-center justify-between gap-2 rounded-xl border px-4 text-left text-sm text-white backdrop-blur-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#96bea8]/20 ${
+        className={`flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border px-4 text-left text-sm text-white backdrop-blur-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#96bea8]/20 ${
           open
             ? "border-[#96bea8]/60 bg-[#0a100d]/75"
             : "border-[#96bea8]/25 bg-[#121c17]/55 hover:border-[#96bea8]/40"
@@ -103,7 +103,7 @@ export function SearchableSelect({
             className="mb-1.5 h-9 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-[#96bea8]/50"
           />
 
-          <ul role="listbox" className="max-h-60 overflow-auto">
+          <ul role="listbox" className="max-h-60 overflow-auto cursor-pointer">
             {!query && (
               <li>
                 <button type="button" onClick={() => choose("")} className={rowClass(value === "")}>

@@ -1,4 +1,5 @@
 import type { KnowledgeInfo } from "../../interfaces/knowledge.interfaces";
+import { DeleteIcon, EditIcon } from "../../utils/iconsUtils";
 
 type KnowledgeCardProps = {
   knowledge: KnowledgeInfo;
@@ -62,9 +63,10 @@ export function KnowledgeCard({ knowledge, index = 0, onClick, onEdit, onDelete 
                 e.stopPropagation();
                 onEdit(knowledge);
               }}
-              className="rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
+              className="cursor-pointer flex items-center rounded-md px-2 py-1 transition hover:bg-[#8FD3AE]/10 hover:text-[#8FD3AE]"
             >
-              Edit
+              <EditIcon size={13}/>
+              <span className="ml-2">Edit</span>
             </button>
           )}
           {onDelete && (
@@ -74,9 +76,10 @@ export function KnowledgeCard({ knowledge, index = 0, onClick, onEdit, onDelete 
                 e.stopPropagation();
                 onDelete(knowledge);
               }}
-              className="rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
+              className="cursor-pointer flex items-center rounded-md px-2 py-1 transition hover:bg-red-500/10 hover:text-red-300"
             >
-              Delete
+              <DeleteIcon size={13} />
+              <span className="ml-2">Delete</span>
             </button>
           )}
         </div>

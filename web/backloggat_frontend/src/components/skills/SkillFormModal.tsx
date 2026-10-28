@@ -55,7 +55,7 @@ export function SkillFormModal({ open, skill, onClose, onSubmit }: SkillFormModa
       className="w-full md:max-w-md"
       title={isEdit ? "Edit skill" : "New skill"}
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-3">
         <div>
           <UITextField
             label="Name"
@@ -77,7 +77,6 @@ export function SkillFormModal({ open, skill, onClose, onSubmit }: SkillFormModa
             />
             <div className="flex-1">
               <UITextField
-                label="Color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder="#64748b"
@@ -92,14 +91,14 @@ export function SkillFormModal({ open, skill, onClose, onSubmit }: SkillFormModa
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-lg px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
+            className="rounded-lg cursor-pointer px-4 py-2 text-sm text-[#A7B5AD] transition hover:bg-white/5"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
+            className="rounded-lg cursor-pointer border border-[#8FD3AE]/40 bg-[#8FD3AE]/10 px-4 py-2 text-sm text-[#8FD3AE] transition hover:bg-[#8FD3AE]/20 disabled:opacity-50"
           >
             {saving ? "Saving..." : isEdit ? "Save changes" : "Create"}
           </button>

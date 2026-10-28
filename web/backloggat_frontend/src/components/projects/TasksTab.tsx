@@ -100,7 +100,7 @@ export function TasksTab({ projectId, reloadKey, onChanged }: Props) {
     const hasFilters = debouncedSearch !== "" || status !== "" || priority !== "";
 
     const chip = (active: boolean) =>
-        `rounded-full border px-3 py-1 text-xs transition ${active
+        `rounded-full border px-3 py-1 text-xs cursor-pointer transition ${active
             ? "border-[#8FD3AE]/50 bg-[#8FD3AE]/10 text-[#8FD3AE]"
             : "border-white/10 bg-white/5 text-[#A7B5AD] hover:border-white/20"
         }`;
