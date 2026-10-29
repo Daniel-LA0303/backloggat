@@ -17,7 +17,7 @@ import Circles from "../components/Circles";
 import { DockMenu } from "../components/DockMenu";
 import { ResourceRow } from "../components/resources/ResourceRow";
 import Modal from "../components/Modal";
-import { getMenuItems } from "../utils/globalUtils";
+import { getMenuItems, toFormData } from "../utils/globalUtils";
 import UIButton from "../components/UIButton";
 import { PlusIcon } from "../utils/iconsUtils";
 // + tus imports: useApi, Modal, DockMenu, Circles, GearIcon, ScreenSpinner, SkillInfo
@@ -101,7 +101,7 @@ const Resources = () => {
     const url = editing ? `/api/resources/${editing.id}` : "/api/resources";
     const data = await requestAuth<ResourceInfo>(url, {
       method: editing ? "PUT" : "POST",
-      body: JSON.stringify(payload),
+      body: toFormData(payload)
     });
     if (!data) return false;
 

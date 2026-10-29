@@ -18,7 +18,7 @@ import { ProjectCard } from "../../components/projects/ProjectCard";
 import { KnowledgeFormModal, type KnowledgePayload } from "../../components/knowledge/KnowledgeFormModal";
 import { NoteFormModal, type NotePayload } from "../../components/notes/NoteFormModal";
 import { ResourceFormModal, type ResourcePayload } from "../../components/resources/ResourceFormModal";
-import { getMenuItems } from "../../utils/globalUtils";
+import { getMenuItems, toFormData } from "../../utils/globalUtils";
 
 
 type TabKey = "knowledge" | "notes" | "resources" | "projects";
@@ -87,8 +87,8 @@ const SkillView = () => {
   // MUST be stable: the modals reset their form when this changes
   const defaultSkillIds = useMemo(() => [Number(id)], [id]);
 
-  const create = (url: string) => async (payload: unknown): Promise<boolean> => {
-    const data = await requestAuth(url, { method: "POST", body: JSON.stringify(payload) });
+  const create = (url: string) => async (payload: any): Promise<boolean> => {
+    const data = await requestAuth(url, { method: "POST", body: toFormData(payload) });
     if (!data) return false; // keep the modal open so nothing is lost
     setModal(null);
     bump();

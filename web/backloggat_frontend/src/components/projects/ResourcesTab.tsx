@@ -4,6 +4,7 @@ import { ResourceFormModal, type ResourcePayload } from "../resources/ResourceFo
 import { ResourceMini } from "./ResourceMini";
 import type { SkillInfo } from "../../interfaces/skills.interfaces";
 import type { ResourceRef } from "../../interfaces/projects.interfaces";
+import { toFormData } from "../../utils/globalUtils";
 
 type Props = {
     projectId: string;
@@ -32,7 +33,7 @@ export function ResourcesTab({ projectId, reloadKey, onChanged, skills }: Props)
     const handleSave = async (payload: ResourcePayload): Promise<boolean> => {
         const data = await requestAuth("/api/resources", {
             method: "POST",
-            body: JSON.stringify(payload),
+            body: toFormData(payload)
         });
         if (!data) return false;
 

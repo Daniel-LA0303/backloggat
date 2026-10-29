@@ -8,12 +8,15 @@ import (
 	"backloggat/runner/modules/projects"
 	"backloggat/runner/modules/resources"
 	"backloggat/runner/modules/skills"
+	"backloggat/runner/modules/storage"
 	"backloggat/runner/modules/user"
 	"backloggat/runner/modules/vault"
 	"backloggat/runner/platform/apperr"
 	"backloggat/runner/platform/response"
 	"context"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -44,8 +47,18 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 	passSvc := vault.NewPasswordService(passRepo)
 	passHanlder := vault.NewPasswordHandler(passSvc)
 
+	drv, err := storage.NewDriveUploader(storage.DriveConfig{
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		RefreshToken: os.Getenv("GOOGLE_REFRESH_TOKEN"),
+		FolderName:   os.Getenv("GOOGLE_DRIVE_FOLDER_NAME"),
+	})
+	if err != nil {
+		log.Fatalf("drive: %v", err)
+	}
+
 	resoRepo := resources.NewResourceRepository(db)
-	resoSvc := resources.NewResourceService(resoRepo)
+	resoSvc := resources.NewResourceService(resoRepo, drv)
 	resoHandler := resources.NewResourceHandler(resoSvc)
 
 	noteRepo := notes.NewNoteRepository(db)

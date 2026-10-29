@@ -169,13 +169,13 @@ func (r *ResourceRepository) ListResourceProjectIds(ctx context.Context, userID,
 
 // ---- writes (ex is the db or a transaction) ----
 
-func (r *ResourceRepository) InsertResource(ctx context.Context, ex sqlx.ExtContext, userID int64, d *CreateResourceRequest) (*ResourceInfo, error) {
+func (r *ResourceRepository) InsertResource(ctx context.Context, ex sqlx.ExtContext, userID int64, d *ResourceRequest, driveFileID *string) (*ResourceInfo, error) {
 	var item ResourceInfo
 	err := sqlx.GetContext(ctx, ex, &item,
-		`INSERT INTO resources_tbl (user_id, name, link, type)
-		 VALUES (?, ?, ?, ?)
-		 RETURNING resource_id, user_id, name, link, type, created_at, updated_at`,
-		userID, d.Name, d.Link, d.Type,
+		`INSERT INTO resources_tbl (user_id, name, link, type, drive_file_id)
+		 VALUES (?, ?, ?, ?, ?)
+		 RETURNING resource_id, user_id, name, link, type, drive_file_id, created_at, updated_at`,
+		userID, d.Name, d.Link, d.Type, driveFileID,
 	)
 	if err != nil {
 		log.Printf("InsertResource ERROR: %v\n", err)
@@ -184,7 +184,7 @@ func (r *ResourceRepository) InsertResource(ctx context.Context, ex sqlx.ExtCont
 	return &item, nil
 }
 
-func (r *ResourceRepository) UpdateResource(ctx context.Context, ex sqlx.ExtContext, userID, id int64, d *UpdateResourceRequest) (*ResourceInfo, error) {
+/*func (r *ResourceRepository) UpdateResource(ctx context.Context, ex sqlx.ExtContext, userID, id int64, d *UpdateResourceRequest) (*ResourceInfo, error) {
 	var item ResourceInfo
 	err := sqlx.GetContext(ctx, ex, &item,
 		`UPDATE resources_tbl
@@ -204,7 +204,7 @@ func (r *ResourceRepository) UpdateResource(ctx context.Context, ex sqlx.ExtCont
 		return nil, apperr.NewDatabase(err)
 	}
 	return &item, nil
-}
+}*/
 
 func (r *ResourceRepository) InsertResourceSkill(ctx context.Context, ex sqlx.ExtContext, resourceID, skillID int64) error {
 	_, err := ex.ExecContext(ctx,
@@ -310,6 +310,56 @@ func (r *ResourceRepository) DeleteResource(ctx context.Context, ex sqlx.ExtCont
 	if err != nil {
 		log.Printf("DeleteResource ERROR: %v\n", err)
 		return apperr.NewDatabase(err)
+	}
+	return nil
+}
+
+func (r *ResourceRepository) GetResourceByID(ctx context.Context, ex sqlx.ExtContext, userID, resourceID int64) (*ResourceInfo, error) {
+	var item ResourceInfo
+	err := sqlx.GetContext(ctx, ex, &item,
+		`SELECT resource_id, user_id, name, link, type, drive_file_id, created_at, updated_at
+		 FROM resources_tbl WHERE resource_id = ? AND user_id = ?`,
+		resourceID, userID,
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, apperr.NewConflict("resource not found")
+	}
+	if err != nil {
+		log.Printf("GetResourceByID ERROR: %v\n", err)
+		return nil, apperr.NewDatabase(err)
+	}
+	return &item, nil
+}
+
+func (r *ResourceRepository) UpdateResource(ctx context.Context, ex sqlx.ExtContext, userID, resourceID int64, name, link, typ string, driveFileID *string) (*ResourceInfo, error) {
+	var item ResourceInfo
+	err := sqlx.GetContext(ctx, ex, &item,
+		`UPDATE resources_tbl
+		 SET name = ?, link = ?, type = ?, drive_file_id = ?, updated_at = CURRENT_TIMESTAMP
+		 WHERE resource_id = ? AND user_id = ?
+		 RETURNING resource_id, user_id, name, link, type, drive_file_id, created_at, updated_at`,
+		name, link, typ, driveFileID, resourceID, userID,
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, apperr.NewConflict("resource not found")
+	}
+	if err != nil {
+		log.Printf("UpdateResource ERROR: %v\n", err)
+		return nil, apperr.NewDatabase(err)
+	}
+	return &item, nil
+}
+
+func (r *ResourceRepository) ReplaceResourceSkills(ctx context.Context, ex sqlx.ExtContext, resourceID int64, skillIDs []int64) error {
+	if _, err := ex.ExecContext(ctx,
+		`DELETE FROM resources_skills_tbl WHERE resource_id = ?`, resourceID); err != nil {
+		log.Printf("ReplaceResourceSkills ERROR: %v\n", err)
+		return apperr.NewDatabase(err)
+	}
+	for _, id := range skillIDs {
+		if err := r.InsertResourceSkill(ctx, ex, resourceID, id); err != nil {
+			return err
+		}
 	}
 	return nil
 }

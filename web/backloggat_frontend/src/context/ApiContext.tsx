@@ -20,6 +20,16 @@ type ApiEnvelope<T> = {
     data: T;
 };
 
+const buildHeaders = (options: RequestInit, token?: string | null): HeadersInit => {
+    const isForm = options.body instanceof FormData;
+    return {
+        // con FormData el navegador pone multipart/form-data + boundary
+        ...(!isForm && { "Content-Type": "application/json" }),
+        ...options.headers,
+        ...(token && { Authorization: `Bearer ${token}` }),
+    };
+};
+
 type ApiContextType = {
     request: <T>(
         path: string,
@@ -54,11 +64,7 @@ export function ApiProvider({ children }: { children: ReactNode }) {
             setLoading(true);
             const response = await fetch(`${API_URL}${path}`, {
                 ...options,
-                headers: {
-                    "Content-Type": "application/json",
-                    ...options.headers,
-
-                },
+                headers: buildHeaders(options),
             });
 
             const body = await response.json() as ApiEnvelope<T>;
@@ -89,13 +95,7 @@ export function ApiProvider({ children }: { children: ReactNode }) {
             setLoading(true);
             const response = await fetch(`${API_URL}${path}`, {
                 ...options,
-                headers: {
-                    "Content-Type": "application/json",
-                    ...options.headers,
-                    ...(token && {
-                        Authorization: `Bearer ${token}`,
-                    }),
-                },
+                headers: buildHeaders(options, token),
             });
 
             const body = await response.json() as ApiEnvelope<T>;

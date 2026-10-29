@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -18,6 +20,11 @@ func main() {
 }
 
 func run() error {
+
+	if err := godotenv.Load(); err != nil {
+		log.Printf("no .env file found: %v", err)
+	}
+
 	cfg := config.Load() // get config
 
 	db, err := database.Open(cfg.DataDir, cfg.DBName) // get database config
