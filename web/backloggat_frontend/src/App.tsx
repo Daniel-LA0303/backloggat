@@ -1,5 +1,4 @@
 import './App.css'
-import Test from './components/Test'
 
 import {
   createBrowserRouter,
@@ -36,10 +35,6 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      {
-        path: "/home",
-        element: <Test />,
-      },
       {
         path: "/skills",
         element: <Skills />,

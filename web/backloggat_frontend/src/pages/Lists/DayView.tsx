@@ -26,8 +26,9 @@ const DayView = () => {
     const [firstLoad, setFirstLoad] = useState(true);
     const [showDone, setShowDone] = useState(false);
 
-    const [note, setNote] = useState("");
-    const [savingNote, setSavingNote] = useState(false);
+    //const [note, setNote] = useState("");
+    //const [savingNote, setSavingNote] = useState(false);
+
 
     const [editing, setEditing] = useState<TaskInfo | null>(null);
     const [toDelete, setToDelete] = useState<TaskInfo | null>(null);
@@ -37,7 +38,7 @@ const DayView = () => {
         setFirstLoad(false);
         if (data) {
             setDay(data);
-            setNote(data.note);
+            //setNote(data.note);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dayId]);

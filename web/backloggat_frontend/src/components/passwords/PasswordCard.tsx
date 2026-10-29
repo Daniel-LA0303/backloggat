@@ -1,5 +1,5 @@
 import type { PasswordInfo } from "../../interfaces/passwords.interfaces";
-import { DeleteIcon, EditIcon, EyeIcon } from "../../utils/iconsUtils";
+import { DeleteIcon, EyeIcon } from "../../utils/iconsUtils";
 
 type Props = {
   item: PasswordInfo;

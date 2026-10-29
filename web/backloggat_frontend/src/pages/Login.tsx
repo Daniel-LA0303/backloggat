@@ -10,8 +10,6 @@ import { ScreenSpinner } from '../components/ScreenSpinnerProps';
 
 const Login = () => {
 
-  //const API_URL = "http://localhost:8080";
-
   const navigate = useNavigate();
 
 

@@ -21,11 +21,11 @@ func main() {
 
 func run() error {
 
+	_ = godotenv.Load()
+	cfg := config.Load()
 	if err := godotenv.Load(); err != nil {
 		log.Printf("no .env file found: %v", err)
 	}
-
-	cfg := config.Load() // get config
 
 	db, err := database.Open(cfg.DataDir, cfg.DBName) // get database config
 	if err != nil {

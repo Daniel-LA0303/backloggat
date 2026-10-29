@@ -17,6 +17,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -102,11 +104,37 @@ func New(cfg config.Config, db *sqlx.DB) *Server {
 		// projects.RegisterRoutes(api, projectsHandler)  <- later
 	})
 
+	serveSPA(r, cfg.WebDir)
+
 	return &Server{http: &http.Server{
 		Addr:              cfg.Addr,
 		Handler:           r,
 		ReadHeaderTimeout: 5 * time.Second,
 	}}
+}
+
+func serveSPA(r chi.Router, dir string) {
+	fs := http.Dir(dir)
+	files := http.FileServer(fs)
+
+	r.Get("/*", func(w http.ResponseWriter, req *http.Request) {
+		// no atrapes rutas del API que no existen
+		if strings.HasPrefix(req.URL.Path, "/api/") {
+			response.Handle(func(w http.ResponseWriter, r *http.Request) error {
+				return apperr.NewNotFound("Route")
+			})(w, req)
+			return
+		}
+		if f, err := fs.Open(req.URL.Path); err == nil {
+			st, serr := f.Stat()
+			f.Close()
+			if serr == nil && !st.IsDir() {
+				files.ServeHTTP(w, req)
+				return
+			}
+		}
+		http.ServeFile(w, req, filepath.Join(dir, "index.html"))
+	})
 }
 
 // Run blocks until the server fails or ctx is cancelled (Ctrl+C).
